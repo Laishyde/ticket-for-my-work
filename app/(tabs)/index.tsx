@@ -40,7 +40,7 @@ const getDynamicShowDate = () => {
     dayOfWeek = "Sexta-feira";
   }
 
-  // AJUSTE AQUI: Agora exibe o dia (ex: Sábado, 18) na interface mantendo sua lógica intacta
+  // Mantido idêntico ao original
   return `${dayOfWeek}, ${showDay} • 20:45h`;
 };
 
@@ -121,7 +121,7 @@ export default function HomeScreen() {
         {/* Card de Ingresso */}
         <TouchableOpacity
           style={styles.ticketCard}
-          onPress={() => handleEventPress("harry-styles")}
+          onPress={() => handleEventPress("djavan-rio")}
           activeOpacity={0.8}
         >
           <View style={styles.eventImageContainer}>
@@ -136,18 +136,17 @@ export default function HomeScreen() {
 
           <View style={styles.eventInfo}>
             <View style={styles.ticketMeta}>
-              <Text style={styles.ticketCount}>8 ingressos</Text>
-              <Text style={styles.dotSeparator}>•</Text>
-              {/* Exibirá dinamicamente no layout: "Sábado, 18 • 20:45h" */}
-              <Text style={styles.eventDate}>{dynamicDate}</Text>
+              <Text style={styles.ticketCount}>1 ingresso</Text>
+              <Text style={styles.dotSeparator}></Text>
+              <Text style={styles.eventDate}>Domingo 2 21:00hs</Text>
             </View>
 
             <Text style={styles.eventTitle} numberOfLines={2}>
-              Harry Styles: Together, Together
+              Djavan - Rio de Janeiro
             </Text>
 
             <Text style={styles.eventLocation} numberOfLines={1}>
-              MorumBIS
+              Farmasi Arena
             </Text>
           </View>
         </TouchableOpacity>

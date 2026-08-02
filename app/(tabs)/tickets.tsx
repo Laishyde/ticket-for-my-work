@@ -5,55 +5,25 @@ import {
   Animated,
   Dimensions,
   Image,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
   SafeAreaView,
   ScrollView,
   StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
-  NativeSyntheticEvent,
-  NativeScrollEvent
+  View
 } from "react-native";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 const CARD_WIDTH = SCREEN_WIDTH * 0.9; 
 
-// Função para obter as informações do show baseado na data atual (Julho de 2026)
+// Função para obter as informações do show DJAVAN
 const getDynamicShowDate = () => {
-  const today = new Date();
-  const currentDay = today.getDate();
-  const currentMonth = today.getMonth(); // 6 é Julho
-  const currentYear = today.getFullYear();
-
-  // Definindo o dia do show padrão com base no dia atual
-  let showDay = 17;
-  let dayOfWeek = "Sexta-feira";
-
-  // Se estivermos em Julho de 2026 (ou se quiser forçar para testes)
-  if (currentYear === 2026 && currentMonth === 6) {
-    if (currentDay <= 17) {
-      showDay = 17;
-      dayOfWeek = "Sexta-feira";
-    } else if (currentDay === 18) {
-      showDay = 18;
-      dayOfWeek = "Sábado";
-    } else if (currentDay >= 19 && currentDay <= 21) {
-      showDay = 21;
-      dayOfWeek = "Terça-feira";
-    } else {
-      showDay = 24;
-      dayOfWeek = "Sexta-feira";
-    }
-  } else {
-    // Fallback caso não seja o mês correto (Mantém o de hoje/amanhã configurado para 17)
-    showDay = 17;
-    dayOfWeek = "Sexta-feira";
-  }
-
   return {
-    data: `${dayOfWeek} · ${showDay}/jul/26 · 20:45`,
-    headerData: `${showDay.toString().padStart(2, '0')}/07/2026 - Estádio do MorumBIS`
+    data: "Sexta-feira · 17/jan/26 · 21:00",
+    headerData: "17/01/2026 - Rio de Janeiro"
   };
 };
 
@@ -63,122 +33,53 @@ const tickets = [
   {
     id: 1,
     tab: "",
-    evento: "HARRY STYLES",
+    evento: "DJAVAN - RIO DE JANEIRO",
     data: dynamicDateInfo.data,
     headerData: dynamicDateInfo.headerData,
-    local: "Estádio do MorumBIS",
-    setor: "ARQUIBANCADA",
-    secao: "SUPERIOR",
-    entrada: "PORTÃO 06, 15",
-    valor: "R$ 530,00",
-    total: "R$ 530,00",
-    qr: "HARRY-STYLES-ARQUIBANCADA",
-    valorTipo: "INTEIRA - R$ 530",
+    local: "Rio de Janeiro",
+    setor: "Cadeira N1",
+    secao: "CADEIRA N1",
+    entrada: "livre",
+    valor: "R$ 690,00 + R$ 69,00",
+    total: "R$ 759,00",
+    qr: "DJAVAN-CADEIRA-N1",
+    valorTipo: "R$ 690,00 + R$ 69,00",
+    abertura: "18:00",
+    inicio: "21:00",
   },
   {
     id: 2,
     tab: "",
-    evento: "HARRY STYLES",
+    evento: "DJAVAN - RIO DE JANEIRO",
     data: dynamicDateInfo.data,
     headerData: dynamicDateInfo.headerData,
-    local: "Estádio do MorumBIS",
-    setor: "PISTA",
-    secao: "PISTA",
-    entrada: "PORTÃO 02, 04, 08",
-    valor: "R$ 700,00",
-    total: "R$ 700,00",
-    qr: "HARRY-STYLES-PISTA",
-    valorTipo: "INTEIRA - R$ 700",
+    local: "Rio de Janeiro",
+    setor: "Cadeira N3",
+    secao: "CADEIRA N3",
+    entrada: "livre",
+    valor: "R$ 210,00 + R$ 63,00",
+    total: "R$ 273,00",
+    qr: "DJAVAN-CADEIRA-N3",
+    valorTipo: "R$ 210,00 + R$ 63,00",
+    abertura: "18:00",
+    inicio: "21:00",
   },
   {
     id: 3,
     tab: "",
-    evento: "HARRY STYLES",
+    evento: "DJAVAN - RIO DE JANEIRO",
     data: dynamicDateInfo.data,
     headerData: dynamicDateInfo.headerData,
-    local: "Estádio do MorumBIS",
-    setor: "CADEIRA SUPERIOR",
-    secao: "SUPERIOR",
-    entrada: "PORTÃO 05, 16",
-    valor: "R$ 800,00",
-    total: "R$ 800,00",
-    qr: "HARRY-STYLES-CADEIRA-SUPERIOR",
-    valorTipo: "INTEIRA - R$ 800",
-  },
-  {
-    id: 4,
-    tab: "",
-    evento: "HARRY STYLES",
-    data: dynamicDateInfo.data,
-    headerData: dynamicDateInfo.headerData,
-    local: "Estádio do MorumBIS",
-    setor: "CADEIRA INFERIOR",
-    secao: "INFERIOR",
-    entrada: "PORTÃO 02, 17, 18",
-    valor: "R$ 880,00",
-    total: "R$ 880,00",
-    qr: "HARRY-STYLES-CADEIRA-INFERIOR",
-    valorTipo: "INTEIRA - R$ 880",
-  },
-  {
-    id: 5,
-    tab: "",
-    evento: "HARRY STYLES",
-    data: dynamicDateInfo.data,
-    headerData: dynamicDateInfo.headerData,
-    local: "Estádio do MorumBIS",
-    setor: "PIT CIRCLE",
-    secao: "PREMIUM",
-    entrada: "PORTÃO 02",
-    valor: "R$ 1.410,00",
-    total: "R$ 1.410,00",
-    qr: "HARRY-STYLES-PIT-CIRCLE",
-    valorTipo: "INTEIRA - R$ 1.410",
-  },
-  {
-    id: 6,
-    tab: "",
-    evento: "HARRY STYLES",
-    data: dynamicDateInfo.data,
-    headerData: dynamicDateInfo.headerData,
-    local: "Estádio do MorumBIS",
-    setor: "PIT DISCO",
-    secao: "PREMIUM",
-    entrada: "PORTÃO 18",
-    valor: "R$ 1.410,00",
-    total: "R$ 1.410,00",
-    qr: "HARRY-STYLES-PIT-DISCO",
-    valorTipo: "INTEIRA - R$ 1.410",
-  },
-  {
-    id: 7,
-    tab: "",
-    evento: "HARRY STYLES",
-    data: dynamicDateInfo.data,
-    headerData: dynamicDateInfo.headerData,
-    local: "Estádio do MorumBIS",
-    setor: "PIT KISS",
-    secao: "PREMIUM",
-    entrada: "PORTÃO 02",
-    valor: "R$ 1.410,00",
-    total: "R$ 1.410,00",
-    qr: "HARRY-STYLES-PIT-KISS",
-    valorTipo: "INTEIRA - R$ 1.410",
-  },
-  {
-    id: 8,
-    tab: "",
-    evento: "HARRY STYLES",
-    data: dynamicDateInfo.data,
-    headerData: dynamicDateInfo.headerData,
-    local: "Estádio do MorumBIS",
-    setor: "PIT SQUARE",
-    secao: "PREMIUM",
-    entrada: "PORTÃO 16",
-    valor: "R$ 1.410,00",
-    total: "R$ 1.410,00",
-    qr: "HARRY-STYLES-PIT-SQUARE",
-    valorTipo: "INTEIRA - R$ 1.410",
+    local: "Rio de Janeiro",
+    setor: "Pista Premium",
+    secao: "INTEIRA",
+    entrada: "livre",
+    valor: "R$ 630,00 + R$ 63,00",
+    total: "R$ 693,00",
+    qr: "DJAVAN-PISTA-PREMIUM",
+    valorTipo: "R$ 630,00 + R$ 63,00",
+    abertura: "18:00",
+    inicio: "20:45",
   },
 ];
 
@@ -367,11 +268,11 @@ export default function TicketsScreen() {
                   </View>
                   <View style={styles.gridItem}>
                     <Text style={styles.gridLabel}>Abertura</Text>
-                    <Text style={styles.gridValue}>16:00</Text>
+                    <Text style={styles.gridValue}>{ticket.abertura}</Text>
                   </View>
                   <View style={styles.gridItem}>
                     <Text style={styles.gridLabel}>Início</Text>
-                    <Text style={styles.gridValue}>{ticket.data.split(' · ')[2] || "20:45"}</Text>
+                    <Text style={styles.gridValue}>{ticket.inicio}</Text>
                   </View>
                 </View>
               </View>
