@@ -21,9 +21,17 @@ const CARD_WIDTH = SCREEN_WIDTH * 0.9;
 
 // Função para obter as informações do show DJAVAN
 const getDynamicShowDate = () => {
+  const today = new Date();
+  const currentDay = today.getDate();
+  const currentMonth = today.getMonth() + 1; // +1 porque getMonth() retorna 0-11
+  const currentYear = today.getFullYear();
+  
+  const daysOfWeek = ["Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"];
+  const dayOfWeek = daysOfWeek[today.getDay()];
+  
   return {
-    data: "Sexta-feira · 17/jan/26 · 21:00",
-    headerData: "17/01/2026 - Rio de Janeiro"
+    data: `${dayOfWeek} · ${currentDay.toString().padStart(2, '0')}/${currentMonth.toString().padStart(2, '0')}/${currentYear.toString().slice(-2)} · 21:00`,
+    headerData: `${currentDay.toString().padStart(2, '0')}/${currentMonth.toString().padStart(2, '0')}/${currentYear} - Rio de Janeiro`
   };
 };
 
