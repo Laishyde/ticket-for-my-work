@@ -138,7 +138,7 @@ export default function HomeScreen() {
             <View style={styles.ticketMeta}>
               <Text style={styles.ticketCount}>1 ingresso</Text>
               <Text style={styles.dotSeparator}></Text>
-              <Text style={styles.eventDate}>Domingo 2 21:00hs</Text>
+              <Text style={styles.eventDate}>Sábado 08/08/2026 21:00hs</Text>
             </View>
 
             <Text style={styles.eventTitle} numberOfLines={2}>
