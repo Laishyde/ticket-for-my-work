@@ -136,17 +136,17 @@ export default function HomeScreen() {
 
           <View style={styles.eventInfo}>
             <View style={styles.ticketMeta}>
-              <Text style={styles.ticketCount}>1 ingresso</Text>
+              <Text style={styles.ticketCount}>10 ingresso</Text>
               <Text style={styles.dotSeparator}></Text>
-              <Text style={styles.eventDate}>Sábado 08/08/2026 21:00hs</Text>
+              <Text style={styles.eventDate}></Text>
             </View>
 
             <Text style={styles.eventTitle} numberOfLines={2}>
-              Djavan - Rio de Janeiro
+             Rock in Rio 2026
             </Text>
 
             <Text style={styles.eventLocation} numberOfLines={1}>
-              Farmasi Arena
+              Rio de Janeiro
             </Text>
           </View>
         </TouchableOpacity>
