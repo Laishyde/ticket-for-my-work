@@ -3,12 +3,12 @@ import { Image as ExpoImage } from "expo-image";
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
+    ScrollView,
+    StatusBar,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
 } from "react-native";
 
 // Função com a sua lógica idêntica e intacta, apenas corrigindo a string de exibição
@@ -126,7 +126,7 @@ export default function HomeScreen() {
         >
           <View style={styles.eventImageContainer}>
             <ExpoImage
-              source={require("../../assets/images/lop.jpg")}
+              source={require("../../assets/images/logo.jpg")}
               style={styles.eventImage}
             />
             <View style={styles.tagAgora}>

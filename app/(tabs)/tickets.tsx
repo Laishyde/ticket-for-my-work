@@ -19,75 +19,223 @@ import {
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 const CARD_WIDTH = SCREEN_WIDTH * 0.9; 
 
-// Função para obter as informações do show DJAVAN
-const getDynamicShowDate = () => {
-  const today = new Date();
-  const currentDay = today.getDate();
-  const currentMonth = today.getMonth() + 1; // +1 porque getMonth() retorna 0-11
-  const currentYear = today.getFullYear();
+interface Ticket {
+  id: number;
+  tab: string;
+  evento: string;
+  data: string;
+  headerData: string;
+  local: string;
+  setor: string;
+  secao: string;
+  entrada: string;
+  valor: string;
+  total: string;
+  qr: string;
+  valorTipo: string;
+  abertura: string;
+  inicio: string;
+  image: any;
+}
+
+const getRockInRioDate = (dayOffset: number) => {
+  const baseDate = new Date(2026, 8, 4);
+  const targetDate = new Date(baseDate);
+  targetDate.setDate(baseDate.getDate() + dayOffset);
+  
+  const currentDay = targetDate.getDate();
+  const currentMonth = targetDate.getMonth() + 1;
+  const currentYear = targetDate.getFullYear();
   
   const daysOfWeek = ["Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"];
-  const dayOfWeek = daysOfWeek[today.getDay()];
+  const dayOfWeek = daysOfWeek[targetDate.getDay()];
   
   return {
-    data: `${dayOfWeek} · ${currentDay.toString().padStart(2, '0')}/${currentMonth.toString().padStart(2, '0')}/${currentYear.toString().slice(-2)} · 21:00`,
+    data: `${dayOfWeek} · ${currentDay.toString().padStart(2, '0')}/${currentMonth.toString().padStart(2, '0')}/${currentYear.toString().slice(-2)} · 14:00`,
     headerData: `${currentDay.toString().padStart(2, '0')}/${currentMonth.toString().padStart(2, '0')}/${currentYear} - Rio de Janeiro`
   };
 };
-
-const dynamicDateInfo = getDynamicShowDate();
 
 const tickets = [
   {
     id: 1,
     tab: "",
-    evento: "DJAVAN - RIO DE JANEIRO",
-    data: dynamicDateInfo.data,
-    headerData: dynamicDateInfo.headerData,
-    local: "Rio de Janeiro",
-    setor: "Cadeira N1",
-    secao: "CADEIRA N1",
-    entrada: "livre",
-    valor: "R$ 690,00 + R$ 69,00",
-    total: "R$ 759,00",
-    qr: "DJAVAN-CADEIRA-N1",
-    valorTipo: "R$ 690,00 + R$ 69,00",
-    abertura: "18:00",
-    inicio: "21:00",
+    evento: "Rock in Rio 2026",
+    data: getRockInRioDate(0).data,
+    headerData: getRockInRioDate(0).headerData,
+    local: "Cidade do Rock",
+    setor: "Gramado",
+    secao: "INTEIRA",
+    entrada: "Últ. Acesso: 00h",
+    valor: "R$ 870,00",
+    total: "R$ 870,00",
+    qr: "RIR2026-DIA4-GRAMADO-1",
+    valorTipo: "R$ 870,00",
+    abertura: "14:00",
+    inicio: "14:00",
+    image: require("../../assets/images/dia-4.png"),
   },
   {
     id: 2,
     tab: "",
-    evento: "DJAVAN - RIO DE JANEIRO",
-    data: dynamicDateInfo.data,
-    headerData: dynamicDateInfo.headerData,
-    local: "Rio de Janeiro",
-    setor: "Cadeira N3",
-    secao: "CADEIRA N3",
-    entrada: "livre",
-    valor: "R$ 210,00 + R$ 63,00",
-    total: "R$ 273,00",
-    qr: "DJAVAN-CADEIRA-N3",
-    valorTipo: "R$ 210,00 + R$ 63,00",
-    abertura: "18:00",
-    inicio: "21:00",
+    evento: "Rock in Rio 2026",
+    data: getRockInRioDate(1).data,
+    headerData: getRockInRioDate(1).headerData,
+    local: "Cidade do Rock",
+    setor: "Gramado",
+    secao: "INTEIRA",
+    entrada: "Últ. Acesso: 00h",
+    valor: "R$ 870,00",
+    total: "R$ 870,00",
+    qr: "RIR2026-DIA5-GRAMADO-2",
+    valorTipo: "R$ 870,00",
+    abertura: "14:00",
+    inicio: "14:00",
+    image: require("../../assets/images/dia-5.png"),
   },
   {
     id: 3,
     tab: "",
-    evento: "DJAVAN - RIO DE JANEIRO",
-    data: dynamicDateInfo.data,
-    headerData: dynamicDateInfo.headerData,
-    local: "Rio de Janeiro",
-    setor: "Pista Premium",
+    evento: "Rock in Rio 2026",
+    data: getRockInRioDate(2).data,
+    headerData: getRockInRioDate(2).headerData,
+    local: "Cidade do Rock",
+    setor: "Gramado",
     secao: "INTEIRA",
-    entrada: "livre",
-    valor: "R$ 630,00 + R$ 63,00",
-    total: "R$ 693,00",
-    qr: "DJAVAN-PISTA-PREMIUM",
-    valorTipo: "R$ 630,00 + R$ 63,00",
-    abertura: "18:00",
-    inicio: "20:45",
+    entrada: "Últ. Acesso: 00h",
+    valor: "R$ 870,00",
+    total: "R$ 870,00",
+    qr: "RIR2026-DIA6-GRAMADO-3",
+    valorTipo: "R$ 870,00",
+    abertura: "14:00",
+    inicio: "14:00",
+    image: require("../../assets/images/dia-6.png"),
+  },
+  {
+    id: 4,
+    tab: "",
+    evento: "Rock in Rio 2026",
+    data: getRockInRioDate(3).data,
+    headerData: getRockInRioDate(3).headerData,
+    local: "Cidade do Rock",
+    setor: "Gramado",
+    secao: "INTEIRA",
+    entrada: "Últ. Acesso: 00h",
+    valor: "R$ 870,00",
+    total: "R$ 870,00",
+    qr: "RIR2026-DIA7-GRAMADO-4",
+    valorTipo: "R$ 870,00",
+    abertura: "14:00",
+    inicio: "14:00",
+    image: require("../../assets/images/dia-7.png"),
+  },
+  {
+    id: 5,
+    tab: "",
+    evento: "Rock in Rio 2026",
+    data: getRockInRioDate(4).data,
+    headerData: getRockInRioDate(4).headerData,
+    local: "Cidade do Rock",
+    setor: "Gramado",
+    secao: "INTEIRA",
+    entrada: "Últ. Acesso: 00h",
+    valor: "R$ 870,00",
+    total: "R$ 870,00",
+    qr: "RIR2026-DIA8-GRAMADO-5",
+    valorTipo: "R$ 870,00",
+    abertura: "14:00",
+    inicio: "14:00",
+    image: require("../../assets/images/dia-8.png"),
+  },
+  {
+    id: 6,
+    tab: "",
+    evento: "Rock in Rio 2026",
+    data: getRockInRioDate(5).data,
+    headerData: getRockInRioDate(5).headerData,
+    local: "Cidade do Rock",
+    setor: "Gramado",
+    secao: "INTEIRA",
+    entrada: "Últ. Acesso: 00h",
+    valor: "R$ 870,00",
+    total: "R$ 870,00",
+    qr: "RIR2026-DIA9-GRAMADO-6",
+    valorTipo: "R$ 870,00",
+    abertura: "14:00",
+    inicio: "14:00",
+    image: require("../../assets/images/dia-9.png"),
+  },
+  {
+    id: 7,
+    tab: "",
+    evento: "Rock in Rio 2026",
+    data: getRockInRioDate(6).data,
+    headerData: getRockInRioDate(6).headerData,
+    local: "Cidade do Rock",
+    setor: "Gramado",
+    secao: "INTEIRA",
+    entrada: "Últ. Acesso: 00h",
+    valor: "R$ 870,00",
+    total: "R$ 870,00",
+    qr: "RIR2026-DIA10-GRAMADO-7",
+    valorTipo: "R$ 870,00",
+    abertura: "14:00",
+    inicio: "14:00",
+    image: require("../../assets/images/dia-10.png"),
+  },
+  {
+    id: 8,
+    tab: "",
+    evento: "Rock in Rio 2026",
+    data: getRockInRioDate(7).data,
+    headerData: getRockInRioDate(7).headerData,
+    local: "Cidade do Rock",
+    setor: "Gramado",
+    secao: "INTEIRA",
+    entrada: "Últ. Acesso: 00h",
+    valor: "R$ 870,00",
+    total: "R$ 870,00",
+    qr: "RIR2026-DIA11-GRAMADO-8",
+    valorTipo: "R$ 870,00",
+    abertura: "14:00",
+    inicio: "14:00",
+    image: require("../../assets/images/dia-11.png"),
+  },
+  {
+    id: 9,
+    tab: "",
+    evento: "Rock in Rio 2026",
+    data: getRockInRioDate(8).data,
+    headerData: getRockInRioDate(8).headerData,
+    local: "Cidade do Rock",
+    setor: "Gramado",
+    secao: "INTEIRA",
+    entrada: "Últ. Acesso: 00h",
+    valor: "R$ 870,00",
+    total: "R$ 870,00",
+    qr: "RIR2026-DIA12-GRAMADO-9",
+    valorTipo: "R$ 870,00",
+    abertura: "14:00",
+    inicio: "14:00",
+    image: require("../../assets/images/dia-12.png"),
+  },
+  {
+    id: 10,
+    tab: "",
+    evento: "Rock in Rio 2026",
+    data: getRockInRioDate(9).data,
+    headerData: getRockInRioDate(9).headerData,
+    local: "Cidade do Rock",
+    setor: "Gramado",
+    secao: "INTEIRA",
+    entrada: "Últ. Acesso: 00h",
+    valor: "R$ 870,00",
+    total: "R$ 870,00",
+    qr: "RIR2026-DIA13-GRAMADO-10",
+    valorTipo: "R$ 870,00",
+    abertura: "14:00",
+    inicio: "14:00",
+    image: require("../../assets/images/dia-13.png"),
   },
 ];
 
@@ -185,7 +333,7 @@ export default function TicketsScreen() {
         </ScrollView>
       </View>
 
-      {/* Scroll de Ingressos (Horizontal / Swipable) */}
+      {/* Scroll de Ingressos */}
       <ScrollView
         ref={ticketScrollRef}
         horizontal
@@ -194,17 +342,18 @@ export default function TicketsScreen() {
         onScroll={handleScroll}
         scrollEventThrottle={16}
         style={styles.ticketsHorizontalScroll}
+        contentContainerStyle={{ flexGrow: 1 }}
       >
         {tickets.map((ticket, index) => (
           <View key={ticket.id} style={styles.ticketPageWrapper}>
             <View style={styles.ticketCardWrapper}>
               
-              {/* Parte Superior: Imagem */}
+              {/* Parte Superior: Imagem sem cortes */}
               <View style={styles.ticketImageContainer}>
                 <Image
-                  source={require("../../assets/images/ticket.png")}
+                  source={ticket.image}
                   style={styles.ticketCoverImage}
-                  resizeMode="cover"
+                  resizeMode="stretch"
                 />
                 
                 <View style={styles.overlayBarContainer}>
@@ -365,8 +514,8 @@ const styles = StyleSheet.create({
   ticketPageWrapper: {
     width: SCREEN_WIDTH, 
     alignItems: "center",
-    justifyContent: "flex-start",
-    marginTop: 10,
+    justifyContent: "center",
+    paddingVertical: 12,
   },
   ticketCardWrapper: {
     width: CARD_WIDTH, 
@@ -381,7 +530,7 @@ const styles = StyleSheet.create({
   },
   ticketImageContainer: {
     width: "100%",
-    height: 200,
+    aspectRatio: 16 / 9,
     backgroundColor: "#026cdf",
     position: "relative",
   },
@@ -494,7 +643,7 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
   },
   customFooter: {
-    marginTop: 8,
+    marginHorizontal: 16,
     marginBottom: 16,
     paddingHorizontal: 16,
     paddingVertical: 12,
@@ -529,5 +678,4 @@ const styles = StyleSheet.create({
     fontWeight: "400",
     color: "#c8b6a7",
   },
-  
 });
