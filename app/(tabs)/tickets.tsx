@@ -16,7 +16,7 @@ import {
   View
 } from "react-native";
 
-const { width: SCREEN_WIDTH } = Dimensions.get("window");
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
 const CARD_WIDTH = SCREEN_WIDTH * 0.9; 
 
 interface Ticket {
@@ -47,7 +47,7 @@ const getRockInRioDate = (dayOffset: number) => {
   const currentMonth = targetDate.getMonth() + 1;
   const currentYear = targetDate.getFullYear();
   
-  const daysOfWeek = ["Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"];
+  const daysOfWeek = ["Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sábado"];
   const dayOfWeek = daysOfWeek[targetDate.getDay()];
   
   return {
@@ -59,7 +59,7 @@ const getRockInRioDate = (dayOffset: number) => {
 const tickets = [
   {
     id: 1,
-    tab: "",
+    tab: "1",
     evento: "Rock in Rio 2026",
     data: getRockInRioDate(0).data,
     headerData: getRockInRioDate(0).headerData,
@@ -70,14 +70,14 @@ const tickets = [
     valor: "R$ 870,00",
     total: "R$ 870,00",
     qr: "RIR2026-DIA4-GRAMADO-1",
-    valorTipo: "R$ 870,00",
+    valorTipo: "Benefício Itaú 15%",
     abertura: "14:00",
     inicio: "14:00",
     image: require("../../assets/images/dia-4.png"),
   },
   {
     id: 2,
-    tab: "",
+    tab: "2",
     evento: "Rock in Rio 2026",
     data: getRockInRioDate(1).data,
     headerData: getRockInRioDate(1).headerData,
@@ -88,14 +88,14 @@ const tickets = [
     valor: "R$ 870,00",
     total: "R$ 870,00",
     qr: "RIR2026-DIA5-GRAMADO-2",
-    valorTipo: "R$ 870,00",
+    valorTipo: "Benefício Itaú 15%",
     abertura: "14:00",
     inicio: "14:00",
     image: require("../../assets/images/dia-5.png"),
   },
   {
     id: 3,
-    tab: "",
+    tab: "3",
     evento: "Rock in Rio 2026",
     data: getRockInRioDate(2).data,
     headerData: getRockInRioDate(2).headerData,
@@ -106,14 +106,14 @@ const tickets = [
     valor: "R$ 870,00",
     total: "R$ 870,00",
     qr: "RIR2026-DIA6-GRAMADO-3",
-    valorTipo: "R$ 870,00",
+    valorTipo: "Benefício Itaú 15%",
     abertura: "14:00",
     inicio: "14:00",
     image: require("../../assets/images/dia-6.png"),
   },
   {
     id: 4,
-    tab: "",
+    tab: "4",
     evento: "Rock in Rio 2026",
     data: getRockInRioDate(3).data,
     headerData: getRockInRioDate(3).headerData,
@@ -124,14 +124,14 @@ const tickets = [
     valor: "R$ 870,00",
     total: "R$ 870,00",
     qr: "RIR2026-DIA7-GRAMADO-4",
-    valorTipo: "R$ 870,00",
+    valorTipo: "Benefício Itaú 15%",
     abertura: "14:00",
     inicio: "14:00",
     image: require("../../assets/images/dia-7.png"),
   },
   {
     id: 5,
-    tab: "",
+    tab: "5",
     evento: "Rock in Rio 2026",
     data: getRockInRioDate(4).data,
     headerData: getRockInRioDate(4).headerData,
@@ -142,14 +142,14 @@ const tickets = [
     valor: "R$ 870,00",
     total: "R$ 870,00",
     qr: "RIR2026-DIA8-GRAMADO-5",
-    valorTipo: "R$ 870,00",
+    valorTipo: "Benefício Itaú 15%",
     abertura: "14:00",
     inicio: "14:00",
     image: require("../../assets/images/dia-8.png"),
   },
   {
     id: 6,
-    tab: "",
+    tab: "6",
     evento: "Rock in Rio 2026",
     data: getRockInRioDate(5).data,
     headerData: getRockInRioDate(5).headerData,
@@ -160,14 +160,14 @@ const tickets = [
     valor: "R$ 870,00",
     total: "R$ 870,00",
     qr: "RIR2026-DIA9-GRAMADO-6",
-    valorTipo: "R$ 870,00",
+    valorTipo: "Benefício Itaú 15%",
     abertura: "14:00",
     inicio: "14:00",
     image: require("../../assets/images/dia-9.png"),
   },
   {
     id: 7,
-    tab: "",
+    tab: "7",
     evento: "Rock in Rio 2026",
     data: getRockInRioDate(6).data,
     headerData: getRockInRioDate(6).headerData,
@@ -178,14 +178,14 @@ const tickets = [
     valor: "R$ 870,00",
     total: "R$ 870,00",
     qr: "RIR2026-DIA10-GRAMADO-7",
-    valorTipo: "R$ 870,00",
+    valorTipo: "Benefício Itaú 15%",
     abertura: "14:00",
     inicio: "14:00",
     image: require("../../assets/images/dia-10.png"),
   },
   {
     id: 8,
-    tab: "",
+    tab: "8",
     evento: "Rock in Rio 2026",
     data: getRockInRioDate(7).data,
     headerData: getRockInRioDate(7).headerData,
@@ -196,14 +196,14 @@ const tickets = [
     valor: "R$ 870,00",
     total: "R$ 870,00",
     qr: "RIR2026-DIA11-GRAMADO-8",
-    valorTipo: "R$ 870,00",
+    valorTipo: "Benefício Itaú 15%",
     abertura: "14:00",
     inicio: "14:00",
     image: require("../../assets/images/dia-11.png"),
   },
   {
     id: 9,
-    tab: "",
+    tab: "9",
     evento: "Rock in Rio 2026",
     data: getRockInRioDate(8).data,
     headerData: getRockInRioDate(8).headerData,
@@ -214,14 +214,14 @@ const tickets = [
     valor: "R$ 870,00",
     total: "R$ 870,00",
     qr: "RIR2026-DIA12-GRAMADO-9",
-    valorTipo: "R$ 870,00",
+    valorTipo: "Benefício Itaú 15%",
     abertura: "14:00",
     inicio: "14:00",
     image: require("../../assets/images/dia-12.png"),
   },
   {
     id: 10,
-    tab: "",
+    tab: "10",
     evento: "Rock in Rio 2026",
     data: getRockInRioDate(9).data,
     headerData: getRockInRioDate(9).headerData,
@@ -232,7 +232,7 @@ const tickets = [
     valor: "R$ 870,00",
     total: "R$ 870,00",
     qr: "RIR2026-DIA13-GRAMADO-10",
-    valorTipo: "R$ 870,00",
+    valorTipo: "Benefício Itaú 15%",
     abertura: "14:00",
     inicio: "14:00",
     image: require("../../assets/images/dia-13.png"),
@@ -241,7 +241,7 @@ const tickets = [
 
 export default function TicketsScreen() {
   const [selectedTicket, setSelectedTicket] = useState(0);
-  const currentTicket = tickets[selectedTicket];
+  const currentTicket = tickets[selectedTicket] || tickets[0];
   const router = useRouter();
 
   const ticketScrollRef = useRef<ScrollView>(null);
@@ -271,7 +271,7 @@ export default function TicketsScreen() {
     if (index >= 0 && index < tickets.length && index !== selectedTicket) {
       setSelectedTicket(index);
       tabsScrollRef.current?.scrollTo({
-        x: index * 90 - 40,
+        x: index * 60,
         animated: true,
       });
     }
@@ -315,7 +315,7 @@ export default function TicketsScreen() {
         >
           {tickets.map((ticket, index) => (
             <TouchableOpacity
-              key={index}
+              key={ticket.id}
               style={[styles.tab, selectedTicket === index && styles.activeTab]}
               onPress={() => handleTabPress(index)}
               activeOpacity={0.8}
@@ -326,7 +326,7 @@ export default function TicketsScreen() {
                   selectedTicket === index && styles.activeTabText,
                 ]}
               >
-                {ticket.tab}
+                {ticket.tab || index + 1}
               </Text>
             </TouchableOpacity>
           ))}
@@ -342,7 +342,7 @@ export default function TicketsScreen() {
         onScroll={handleScroll}
         scrollEventThrottle={16}
         style={styles.ticketsHorizontalScroll}
-        contentContainerStyle={{ flexGrow: 1 }}
+        contentContainerStyle={{ alignItems: "center" }}
       >
         {tickets.map((ticket, index) => (
           <View key={ticket.id} style={styles.ticketPageWrapper}>
@@ -388,7 +388,7 @@ export default function TicketsScreen() {
                       </Text>
                     </View>
 
-                    <View style={{ marginTop: 12 }}>
+                    <View style={{ marginTop: 8 }}>
                       <Text style={styles.cardInfoLabel}>Acesso</Text>
                       <Text style={styles.cardInfoValue} numberOfLines={1}>
                         {ticket.entrada}
@@ -396,7 +396,7 @@ export default function TicketsScreen() {
                     </View>
 
                     <TouchableOpacity style={styles.moreInfoButton} activeOpacity={0.7}>
-                      <Text style={styles.moreInfoButtonText}>Mais informações</Text>
+                      <Text style={styles.moreInfoButtonText}>Mais informação</Text>
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -435,6 +435,12 @@ export default function TicketsScreen() {
               </View>
 
             </View>
+
+            {/* Ação de Devolver Ingresso */}
+            <TouchableOpacity style={styles.returnButton} activeOpacity={0.7}>
+              <Ionicons name="arrow-undo" size={16} color="#0084ff" style={styles.returnIcon} />
+              <Text style={styles.returnText}>Devolver ingresso</Text>
+            </TouchableOpacity>
           </View>
         ))}
       </ScrollView>
@@ -461,7 +467,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingVertical: 10,
     borderBottomWidth: 1,
     borderBottomColor: "#1f2937",
   },
@@ -490,17 +496,18 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.5,
     borderBottomColor: "#333",
   },
-  tab: {
-    paddingHorizontal: 20,
+ tab: {
+    paddingHorizontal: 16,
     alignItems: "center",
-    paddingVertical: 14,
+    paddingVertical: 6,
     borderBottomWidth: 3,
     borderBottomColor: "transparent",
   },
   activeTab: {
     borderBottomColor: "transparent",
   },
-  tabText: {
+ tabText: {
+    display: "none", // Oculta o texto das abas
     color: "#666",
     fontSize: 13,
     fontWeight: "600",
@@ -515,7 +522,7 @@ const styles = StyleSheet.create({
     width: SCREEN_WIDTH, 
     alignItems: "center",
     justifyContent: "center",
-    paddingVertical: 12,
+    paddingVertical: 8,
   },
   ticketCardWrapper: {
     width: CARD_WIDTH, 
@@ -530,7 +537,7 @@ const styles = StyleSheet.create({
   },
   ticketImageContainer: {
     width: "100%",
-    aspectRatio: 16 / 9,
+    aspectRatio: 16 / 8.5,
     backgroundColor: "#026cdf",
     position: "relative",
   },
@@ -552,16 +559,16 @@ const styles = StyleSheet.create({
   },
   whiteSection: {
     backgroundColor: "#ffffff",
-    paddingHorizontal: 20,
-    paddingVertical: 16,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
   },
   qrRow: {
     flexDirection: "row",
     alignItems: "center",
   },
   qrImageContainer: {
-    width: 135,
-    height: 135,
+    width: 120,
+    height: 120,
     flexShrink: 0,
   },
   qrImage: {
@@ -571,8 +578,8 @@ const styles = StyleSheet.create({
   },
   qrRightInfo: {
     flex: 1,
-    height: 135,
-    paddingLeft: 20,
+    height: 120,
+    paddingLeft: 16,
     justifyContent: "space-between",
   },
   cardInfoLabel: {
@@ -584,14 +591,14 @@ const styles = StyleSheet.create({
     marginBottom: 2,
   },
   cardInfoValue: {
-    fontSize: 15,
+    fontSize: 14,
     color: "#5f5f5f",
     fontWeight: "400",
   },
   moreInfoButton: {
     backgroundColor: "#dff4f6",
-    paddingHorizontal: 12,
-    paddingVertical: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
     borderRadius: 6,
     alignSelf: "flex-start",
     marginTop: 4,
@@ -603,7 +610,7 @@ const styles = StyleSheet.create({
   },
   dashedContainer: {
     backgroundColor: "#f8f9fa",
-    paddingHorizontal: 24,
+    paddingHorizontal: 16,
   },
   dashedLine: {
     borderWidth: 1,
@@ -614,12 +621,12 @@ const styles = StyleSheet.create({
   },
   graySection: {
     backgroundColor: "#f8f9fa",
-    padding: 24,
+    padding: 16,
   },
   gridContainer: {
     flexDirection: "row",
     flexWrap: "wrap",
-    rowGap: 24,
+    rowGap: 16,
   },
   gridItem: {
     width: "50%",
@@ -629,24 +636,37 @@ const styles = StyleSheet.create({
     fontSize: 9,
     fontWeight: "700",
     textTransform: "uppercase",
-    marginBottom: 4,
+    marginBottom: 2,
   },
   gridValue: {
     color: "#5f5f5f",
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: "500",
   },
   gridValueBold: {
     color: "#5f5f5f",
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: "700",
     textTransform: "uppercase",
   },
+  returnButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 14,
+  },
+  returnIcon: {
+    marginRight: 6,
+  },
+  returnText: {
+    color: "#ffffff",
+    fontSize: 13,
+    fontWeight: "700",
+  },
   customFooter: {
     marginHorizontal: 16,
-    marginBottom: 16,
+    marginBottom: 12,
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingVertical: 10,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
