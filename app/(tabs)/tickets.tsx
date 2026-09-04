@@ -16,7 +16,7 @@ import {
   View
 } from "react-native";
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
+const { width: SCREEN_WIDTH } = Dimensions.get("window");
 const CARD_WIDTH = SCREEN_WIDTH * 0.9; 
 
 interface Ticket {
@@ -93,150 +93,6 @@ const tickets = [
     inicio: "14:00",
     image: require("../../assets/images/dia-5.png"),
   },
-  {
-    id: 3,
-    tab: "3",
-    evento: "Rock in Rio 2026",
-    data: getRockInRioDate(2).data,
-    headerData: getRockInRioDate(2).headerData,
-    local: "Cidade do Rock",
-    setor: "Gramado",
-    secao: "INTEIRA",
-    entrada: "Últ. Acesso: 00h",
-    valor: "R$ 870,00",
-    total: "R$ 870,00",
-    qr: "RIR2026-DIA6-GRAMADO-3",
-    valorTipo: "Benefício Itaú 15%",
-    abertura: "14:00",
-    inicio: "14:00",
-    image: require("../../assets/images/dia-6.png"),
-  },
-  {
-    id: 4,
-    tab: "4",
-    evento: "Rock in Rio 2026",
-    data: getRockInRioDate(3).data,
-    headerData: getRockInRioDate(3).headerData,
-    local: "Cidade do Rock",
-    setor: "Gramado",
-    secao: "INTEIRA",
-    entrada: "Últ. Acesso: 00h",
-    valor: "R$ 870,00",
-    total: "R$ 870,00",
-    qr: "RIR2026-DIA7-GRAMADO-4",
-    valorTipo: "Benefício Itaú 15%",
-    abertura: "14:00",
-    inicio: "14:00",
-    image: require("../../assets/images/dia-7.png"),
-  },
-  {
-    id: 5,
-    tab: "5",
-    evento: "Rock in Rio 2026",
-    data: getRockInRioDate(4).data,
-    headerData: getRockInRioDate(4).headerData,
-    local: "Cidade do Rock",
-    setor: "Gramado",
-    secao: "INTEIRA",
-    entrada: "Últ. Acesso: 00h",
-    valor: "R$ 870,00",
-    total: "R$ 870,00",
-    qr: "RIR2026-DIA8-GRAMADO-5",
-    valorTipo: "Benefício Itaú 15%",
-    abertura: "14:00",
-    inicio: "14:00",
-    image: require("../../assets/images/dia-8.png"),
-  },
-  {
-    id: 6,
-    tab: "6",
-    evento: "Rock in Rio 2026",
-    data: getRockInRioDate(5).data,
-    headerData: getRockInRioDate(5).headerData,
-    local: "Cidade do Rock",
-    setor: "Gramado",
-    secao: "INTEIRA",
-    entrada: "Últ. Acesso: 00h",
-    valor: "R$ 870,00",
-    total: "R$ 870,00",
-    qr: "RIR2026-DIA9-GRAMADO-6",
-    valorTipo: "Benefício Itaú 15%",
-    abertura: "14:00",
-    inicio: "14:00",
-    image: require("../../assets/images/dia-9.png"),
-  },
-  {
-    id: 7,
-    tab: "7",
-    evento: "Rock in Rio 2026",
-    data: getRockInRioDate(6).data,
-    headerData: getRockInRioDate(6).headerData,
-    local: "Cidade do Rock",
-    setor: "Gramado",
-    secao: "INTEIRA",
-    entrada: "Últ. Acesso: 00h",
-    valor: "R$ 870,00",
-    total: "R$ 870,00",
-    qr: "RIR2026-DIA10-GRAMADO-7",
-    valorTipo: "Benefício Itaú 15%",
-    abertura: "14:00",
-    inicio: "14:00",
-    image: require("../../assets/images/dia-10.png"),
-  },
-  {
-    id: 8,
-    tab: "8",
-    evento: "Rock in Rio 2026",
-    data: getRockInRioDate(7).data,
-    headerData: getRockInRioDate(7).headerData,
-    local: "Cidade do Rock",
-    setor: "Gramado",
-    secao: "INTEIRA",
-    entrada: "Últ. Acesso: 00h",
-    valor: "R$ 870,00",
-    total: "R$ 870,00",
-    qr: "RIR2026-DIA11-GRAMADO-8",
-    valorTipo: "Benefício Itaú 15%",
-    abertura: "14:00",
-    inicio: "14:00",
-    image: require("../../assets/images/dia-11.png"),
-  },
-  {
-    id: 9,
-    tab: "9",
-    evento: "Rock in Rio 2026",
-    data: getRockInRioDate(8).data,
-    headerData: getRockInRioDate(8).headerData,
-    local: "Cidade do Rock",
-    setor: "Gramado",
-    secao: "INTEIRA",
-    entrada: "Últ. Acesso: 00h",
-    valor: "R$ 870,00",
-    total: "R$ 870,00",
-    qr: "RIR2026-DIA12-GRAMADO-9",
-    valorTipo: "Benefício Itaú 15%",
-    abertura: "14:00",
-    inicio: "14:00",
-    image: require("../../assets/images/dia-12.png"),
-  },
-  {
-    id: 10,
-    tab: "10",
-    evento: "Rock in Rio 2026",
-    data: getRockInRioDate(9).data,
-    headerData: getRockInRioDate(9).headerData,
-    local: "Cidade do Rock",
-    setor: "Gramado",
-    secao: "INTEIRA",
-    entrada: "Últ. Acesso: 00h",
-    valor: "R$ 870,00",
-    total: "R$ 870,00",
-    qr: "RIR2026-DIA13-GRAMADO-10",
-    valorTipo: "Benefício Itaú 15%",
-    abertura: "14:00",
-    inicio: "14:00",
-    image: require("../../assets/images/dia-13.png"),
-  },
 ];
 
 export default function TicketsScreen() {
@@ -245,7 +101,6 @@ export default function TicketsScreen() {
   const router = useRouter();
 
   const ticketScrollRef = useRef<ScrollView>(null);
-  const tabsScrollRef = useRef<ScrollView>(null);
   const animatedValue = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -270,26 +125,14 @@ export default function TicketsScreen() {
     const index = Math.round(contentOffset / SCREEN_WIDTH);
     if (index >= 0 && index < tickets.length && index !== selectedTicket) {
       setSelectedTicket(index);
-      tabsScrollRef.current?.scrollTo({
-        x: index * 60,
-        animated: true,
-      });
     }
-  };
-
-  const handleTabPress = (index: number) => {
-    setSelectedTicket(index);
-    ticketScrollRef.current?.scrollTo({
-      x: index * SCREEN_WIDTH,
-      animated: true,
-    });
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="#000000" />
 
-      {/* Cabeçalho do Evento */}
+      {/* Cabeçalho */}
       <View style={styles.header}>
         <TouchableOpacity
           style={styles.backButton}
@@ -305,145 +148,119 @@ export default function TicketsScreen() {
         </View>
       </View>
 
-      {/* Abas Superiores de Seleção */}
-      <View style={styles.tabsContainer}>
-        <ScrollView 
-          ref={tabsScrollRef}
-          horizontal 
-          showsHorizontalScrollIndicator={false} 
-          style={{ width: "100%" }}
+      {/* Container Principal sem Scroll Vertical */}
+      <View style={styles.mainContent}>
+        <ScrollView
+          ref={ticketScrollRef}
+          horizontal
+          pagingEnabled
+          showsHorizontalScrollIndicator={false}
+          onScroll={handleScroll}
+          scrollEventThrottle={16}
+          style={styles.ticketsHorizontalScroll}
+          contentContainerStyle={styles.ticketsScrollContent}
         >
           {tickets.map((ticket, index) => (
-            <TouchableOpacity
-              key={ticket.id}
-              style={[styles.tab, selectedTicket === index && styles.activeTab]}
-              onPress={() => handleTabPress(index)}
-              activeOpacity={0.8}
-            >
-              <Text
-                style={[
-                  styles.tabText,
-                  selectedTicket === index && styles.activeTabText,
-                ]}
-              >
-                {ticket.tab || index + 1}
-              </Text>
-            </TouchableOpacity>
+            <View key={ticket.id} style={styles.ticketPageWrapper}>
+              <View style={styles.ticketCardWrapper}>
+                
+                {/* Parte Superior */}
+                <View style={styles.ticketImageContainer}>
+                  <Image
+                    source={ticket.image}
+                    style={styles.ticketCoverImage}
+                    resizeMode="stretch"
+                  />
+                  
+                  <View style={styles.overlayBarContainer}>
+                    <Animated.View 
+                      style={[
+                        styles.progressBar, 
+                        { 
+                          width: selectedTicket === index ? barWidth : "100%", 
+                        }
+                      ]} 
+                    />
+                  </View>
+                </View>
+
+                {/* Parte Central */}
+                <View style={styles.whiteSection}>
+                  <View style={styles.qrRow}>
+                    <View style={styles.qrImageContainer}>
+                      <Image
+                        source={{
+                          uri: `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${ticket.qr}`,
+                        }}
+                        style={styles.qrImage}
+                      />
+                    </View>
+
+                    <View style={styles.qrRightInfo}>
+                      <View>
+                        <Text style={styles.cardInfoLabel}>Setor</Text>
+                        <Text style={styles.cardInfoValue} numberOfLines={1}>
+                          {ticket.setor}
+                        </Text>
+                      </View>
+
+                      <View style={{ marginTop: 8 }}>
+                        <Text style={styles.cardInfoLabel}>Acesso</Text>
+                        <Text style={styles.cardInfoValue} numberOfLines={1}>
+                          {ticket.entrada}
+                        </Text>
+                      </View>
+
+                      <TouchableOpacity style={styles.moreInfoButton} activeOpacity={0.7}>
+                        <Text style={styles.moreInfoButtonText}>Mais informação</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                </View>
+
+                {/* Divisória */}
+                <View style={styles.dashedContainer}>
+                  <View style={styles.dashedLine} />
+                </View>
+
+                {/* Parte Inferior */}
+                <View style={styles.graySection}>
+                  <View style={styles.gridContainer}>
+                    <View style={styles.gridItem}>
+                      <Text style={styles.gridLabel}>Taxa</Text>
+                      <Text style={styles.gridValue}>{ticket.valorTipo}</Text>
+                    </View>
+                    <View style={styles.gridItem} />
+                    <View style={styles.gridItem}>
+                      <Text style={styles.gridLabel}>Seção</Text>
+                      <Text style={styles.gridValueBold}>{ticket.secao}</Text>
+                    </View>
+                    <View style={styles.gridItem}>
+                      <Text style={styles.gridLabel}>Fileira</Text>
+                      <Text style={styles.gridValue}>Não numerado</Text>
+                    </View>
+                    <View style={styles.gridItem}>
+                      <Text style={styles.gridLabel}>Abertura</Text>
+                      <Text style={styles.gridValue}>{ticket.abertura}</Text>
+                    </View>
+                    <View style={styles.gridItem}>
+                      <Text style={styles.gridLabel}>Início</Text>
+                      <Text style={styles.gridValue}>{ticket.inicio}</Text>
+                    </View>
+                  </View>
+                </View>
+
+              </View>
+
+              {/* Botão Devolver */}
+              <TouchableOpacity style={styles.returnButton} activeOpacity={0.7}>
+                <Ionicons name="arrow-undo" size={16} color="#0084ff" style={styles.returnIcon} />
+                <Text style={styles.returnText}>Devolver ingresso</Text>
+              </TouchableOpacity>
+            </View>
           ))}
         </ScrollView>
       </View>
-
-      {/* Scroll de Ingressos */}
-      <ScrollView
-        ref={ticketScrollRef}
-        horizontal
-        pagingEnabled
-        showsHorizontalScrollIndicator={false}
-        onScroll={handleScroll}
-        scrollEventThrottle={16}
-        style={styles.ticketsHorizontalScroll}
-        contentContainerStyle={styles.ticketsScrollContent}
-      >
-        {tickets.map((ticket, index) => (
-          <View key={ticket.id} style={styles.ticketPageWrapper}>
-            <View style={styles.ticketCardWrapper}>
-              
-              {/* Parte Superior: Imagem sem cortes */}
-              <View style={styles.ticketImageContainer}>
-                <Image
-                  source={ticket.image}
-                  style={styles.ticketCoverImage}
-                  resizeMode="stretch"
-                />
-                
-                <View style={styles.overlayBarContainer}>
-                  <Animated.View 
-                    style={[
-                      styles.progressBar, 
-                      { 
-                        width: selectedTicket === index ? barWidth : "100%", 
-                      }
-                    ]} 
-                  />
-                </View>
-              </View>
-
-              {/* Parte Central Branca */}
-              <View style={styles.whiteSection}>
-                <View style={styles.qrRow}>
-                  <View style={styles.qrImageContainer}>
-                    <Image
-                      source={{
-                        uri: `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${ticket.qr}`,
-                      }}
-                      style={styles.qrImage}
-                    />
-                  </View>
-
-                  <View style={styles.qrRightInfo}>
-                    <View>
-                      <Text style={styles.cardInfoLabel}>Setor</Text>
-                      <Text style={styles.cardInfoValue} numberOfLines={1}>
-                        {ticket.setor}
-                      </Text>
-                    </View>
-
-                    <View style={{ marginTop: 8 }}>
-                      <Text style={styles.cardInfoLabel}>Acesso</Text>
-                      <Text style={styles.cardInfoValue} numberOfLines={1}>
-                        {ticket.entrada}
-                      </Text>
-                    </View>
-
-                    <TouchableOpacity style={styles.moreInfoButton} activeOpacity={0.7}>
-                      <Text style={styles.moreInfoButtonText}>Mais informação</Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              </View>
-
-              {/* Divisória Serrilhada */}
-              <View style={styles.dashedContainer}>
-                <View style={styles.dashedLine} />
-              </View>
-
-              {/* Parte Inferior Cinza */}
-              <View style={styles.graySection}>
-                <View style={styles.gridContainer}>
-                  <View style={styles.gridItem}>
-                    <Text style={styles.gridLabel}>Taxa</Text>
-                    <Text style={styles.gridValue}>{ticket.valorTipo}</Text>
-                  </View>
-                  <View style={styles.gridItem} />
-                  <View style={styles.gridItem}>
-                    <Text style={styles.gridLabel}>Seção</Text>
-                    <Text style={styles.gridValueBold}>{ticket.secao}</Text>
-                  </View>
-                  <View style={styles.gridItem}>
-                    <Text style={styles.gridLabel}>Fileira</Text>
-                    <Text style={styles.gridValue}>Não numerado</Text>
-                  </View>
-                  <View style={styles.gridItem}>
-                    <Text style={styles.gridLabel}>Abertura</Text>
-                    <Text style={styles.gridValue}>{ticket.abertura}</Text>
-                  </View>
-                  <View style={styles.gridItem}>
-                    <Text style={styles.gridLabel}>Início</Text>
-                    <Text style={styles.gridValue}>{ticket.inicio}</Text>
-                  </View>
-                </View>
-              </View>
-
-            </View>
-
-            {/* Ação de Devolver Ingresso */}
-            <TouchableOpacity style={styles.returnButton} activeOpacity={0.7}>
-              <Ionicons name="arrow-undo" size={16} color="#0084ff" style={styles.returnIcon} />
-              <Text style={styles.returnText}>Devolver ingresso</Text>
-            </TouchableOpacity>
-          </View>
-        ))}
-      </ScrollView>
 
       {/* Rodapé Fixo */}
       <View style={styles.customFooter}>
@@ -490,44 +307,21 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: 2,
   },
-  tabsContainer: {
-    flexDirection: "row",
-    backgroundColor: "#000000",
-    height: 0,
-    overflow: "hidden",
-  },
- tab: {
-    paddingHorizontal: 16,
-    alignItems: "center",
-    paddingVertical: 6,
-    borderBottomWidth: 3,
-    borderBottomColor: "transparent",
-    height: 0,
-    overflow: "hidden",
-  },
-  activeTab: {
-    borderBottomColor: "transparent",
-  },
- tabText: {
-    display: "none", // Oculta o texto das abas
-    color: "#666",
-    fontSize: 13,
-    fontWeight: "600",
-  },
-  activeTabText: {
-    color: "#026cdf",
+  mainContent: {
+    flex: 1,
+    justifyContent: "space-between",
   },
   ticketsHorizontalScroll: {
     flex: 1,
   },
   ticketsScrollContent: {
-    flexGrow: 1,
-    justifyContent: "flex-start",
+    alignItems: "center",
   },
   ticketPageWrapper: {
     width: SCREEN_WIDTH, 
     alignItems: "center",
-    paddingTop: 8,
+    justifyContent: "space-between",
+    paddingVertical: 12,
   },
   ticketCardWrapper: {
     width: CARD_WIDTH, 
@@ -657,7 +451,7 @@ const styles = StyleSheet.create({
   returnButton: {
     flexDirection: "row",
     alignItems: "center",
-    marginTop: 4,
+    marginTop: 8,
   },
   returnIcon: {
     marginRight: 6,
@@ -669,6 +463,7 @@ const styles = StyleSheet.create({
   },
   customFooter: {
     marginHorizontal: 16,
+    marginBottom: 16,
     paddingHorizontal: 16,
     paddingVertical: 8,
     flexDirection: "row",
