@@ -493,8 +493,6 @@ const styles = StyleSheet.create({
   tabsContainer: {
     flexDirection: "row",
     backgroundColor: "#000000",
-    borderBottomWidth: 0.5,
-    borderBottomColor: "#333",
   },
  tab: {
     paddingHorizontal: 16,
@@ -654,7 +652,7 @@ const styles = StyleSheet.create({
   returnButton: {
     flexDirection: "row",
     alignItems: "center",
-    marginTop: 8,
+    marginTop: 4,
   },
   returnIcon: {
     marginRight: 6,
@@ -667,7 +665,7 @@ const styles = StyleSheet.create({
   customFooter: {
     marginHorizontal: 16,
     paddingHorizontal: 16,
-    paddingVertical: 10,
+    paddingVertical: 8,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
