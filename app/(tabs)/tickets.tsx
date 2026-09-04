@@ -342,7 +342,7 @@ export default function TicketsScreen() {
         onScroll={handleScroll}
         scrollEventThrottle={16}
         style={styles.ticketsHorizontalScroll}
-        contentContainerStyle={{ alignItems: "center" }}
+        contentContainerStyle={styles.ticketsScrollContent}
       >
         {tickets.map((ticket, index) => (
           <View key={ticket.id} style={styles.ticketPageWrapper}>
@@ -518,10 +518,13 @@ const styles = StyleSheet.create({
   ticketsHorizontalScroll: {
     flex: 1,
   },
+  ticketsScrollContent: {
+    flexGrow: 1,
+    justifyContent: "center",
+  },
   ticketPageWrapper: {
     width: SCREEN_WIDTH, 
     alignItems: "center",
-    justifyContent: "center",
   },
   ticketCardWrapper: {
     width: CARD_WIDTH, 
@@ -651,7 +654,7 @@ const styles = StyleSheet.create({
   returnButton: {
     flexDirection: "row",
     alignItems: "center",
-    marginTop: 14,
+    marginTop: 8,
   },
   returnIcon: {
     marginRight: 6,
