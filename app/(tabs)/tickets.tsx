@@ -601,7 +601,7 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     borderRadius: 6,
     alignSelf: "flex-start",
-    marginTop: 4,
+    marginTop: 2,
   },
   moreInfoButtonText: {
     color: "#1fa8b3",
