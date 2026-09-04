@@ -493,6 +493,8 @@ const styles = StyleSheet.create({
   tabsContainer: {
     flexDirection: "row",
     backgroundColor: "#000000",
+    height: 0,
+    overflow: "hidden",
   },
  tab: {
     paddingHorizontal: 16,
@@ -500,6 +502,8 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     borderBottomWidth: 3,
     borderBottomColor: "transparent",
+    height: 0,
+    overflow: "hidden",
   },
   activeTab: {
     borderBottomColor: "transparent",
@@ -518,11 +522,12 @@ const styles = StyleSheet.create({
   },
   ticketsScrollContent: {
     flexGrow: 1,
-    justifyContent: "center",
+    justifyContent: "flex-start",
   },
   ticketPageWrapper: {
     width: SCREEN_WIDTH, 
     alignItems: "center",
+    paddingTop: 8,
   },
   ticketCardWrapper: {
     width: CARD_WIDTH, 
