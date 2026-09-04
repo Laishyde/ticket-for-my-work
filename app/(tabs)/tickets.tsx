@@ -522,7 +522,6 @@ const styles = StyleSheet.create({
     width: SCREEN_WIDTH, 
     alignItems: "center",
     justifyContent: "center",
-    paddingVertical: 8,
   },
   ticketCardWrapper: {
     width: CARD_WIDTH, 
@@ -664,7 +663,6 @@ const styles = StyleSheet.create({
   },
   customFooter: {
     marginHorizontal: 16,
-    marginBottom: 12,
     paddingHorizontal: 16,
     paddingVertical: 10,
     flexDirection: "row",
