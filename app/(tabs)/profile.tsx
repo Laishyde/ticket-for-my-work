@@ -52,7 +52,11 @@ export default function ProfileScreen() {
       >
         {/* User Info */}
         <View style={styles.userSection}>
-          <ExpoImage source={mockUser.avatar} style={styles.avatar} />
+          <ExpoImage
+            source={mockUser.avatar}
+            style={styles.avatar}
+            contentFit="cover"
+          />
           <Text style={styles.userName}>{mockUser.name}</Text>
           <Text style={styles.userEmail}>{mockUser.email}</Text>
 
@@ -137,6 +141,7 @@ export default function ProfileScreen() {
                 <ExpoImage
                   source={ticket.eventImage}
                   style={styles.eventImage}
+                  contentFit="cover"
                 />
                 <View style={styles.eventContent}>
                   <Text style={styles.eventTitle} numberOfLines={2}>
@@ -180,7 +185,11 @@ export default function ProfileScreen() {
                 onPress={() => handleEventPress(event.id)}
                 activeOpacity={0.8}
               >
-                <ExpoImage source={event.image} style={styles.eventImage} />
+                <ExpoImage
+                  source={event.image}
+                  style={styles.eventImage}
+                  contentFit="cover"
+                />
                 <View style={styles.eventContent}>
                   <Text style={styles.eventTitle} numberOfLines={2}>
                     {event.title}
@@ -214,6 +223,7 @@ export default function ProfileScreen() {
                 <ExpoImage
                   source={ticket.eventImage}
                   style={styles.eventImage}
+                  contentFit="cover"
                 />
                 <View style={styles.eventContent}>
                   <Text style={styles.eventTitle} numberOfLines={2}>

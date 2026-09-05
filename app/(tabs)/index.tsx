@@ -128,6 +128,7 @@ export default function HomeScreen() {
             <ExpoImage
               source={require("../../assets/images/logo.jpg")}
               style={styles.eventImage}
+              contentFit="cover"
             />
             <View style={styles.tagAgora}>
               <Text style={styles.tagAgoraText}>AGORA</Text>
