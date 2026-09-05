@@ -540,7 +540,7 @@ const styles = StyleSheet.create({
   },
   ticketImageContainer: {
     width: "100%",
-    flex: 1, // a imagem cresce/encolhe para ocupar o espaço que sobra no card
+    aspectRatio: 16 / 8, // proporção de banner, ocupa 100% da largura sem deixar o container alto
     backgroundColor: "#026cdf",
     position: "relative",
   },
