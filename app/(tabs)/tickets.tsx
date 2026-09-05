@@ -488,6 +488,7 @@ ticketsHorizontalScroll: {
   customFooter: {
     marginHorizontal: 16,
     marginBottom: 12,
+    marginTop: 16,
     paddingHorizontal: 12,
     paddingVertical: 10,
     flexDirection: "row",
