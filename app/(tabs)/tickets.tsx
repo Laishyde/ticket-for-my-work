@@ -47,7 +47,8 @@ const getRockInRioDate = (dayOffset: number) => {
   const currentMonth = targetDate.getMonth() + 1;
   const currentYear = targetDate.getFullYear();
   
-  const daysOfWeek = ["Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sábado"];
+  // Corrigido: faltava "Sexta-feira" no array (tinha só 6 dias em vez de 7)
+  const daysOfWeek = ["Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"];
   const dayOfWeek = daysOfWeek[targetDate.getDay()];
   
   return {
@@ -333,7 +334,7 @@ export default function TicketsScreen() {
         </ScrollView>
       </View>
 
-      {/* Scroll de Ingressos */}
+      {/* Scroll de Ingressos — agora cada página ocupa 100% da altura disponível (sem espaço sobrando) */}
       <ScrollView
         ref={ticketScrollRef}
         horizontal
@@ -342,18 +343,19 @@ export default function TicketsScreen() {
         onScroll={handleScroll}
         scrollEventThrottle={16}
         style={styles.ticketsHorizontalScroll}
-        contentContainerStyle={{ alignItems: "center" }}
+        contentContainerStyle={{ alignItems: "stretch" }}
       >
         {tickets.map((ticket, index) => (
           <View key={ticket.id} style={styles.ticketPageWrapper}>
+
             <View style={styles.ticketCardWrapper}>
               
-              {/* Parte Superior: Imagem sem cortes */}
+              {/* Parte Superior: Imagem preenche o espaço flexível restante */}
               <View style={styles.ticketImageContainer}>
                 <Image
                   source={ticket.image}
                   style={styles.ticketCoverImage}
-                  resizeMode="stretch"
+                  resizeMode="cover"
                 />
                 
                 <View style={styles.overlayBarContainer}>
@@ -492,39 +494,41 @@ const styles = StyleSheet.create({
   },
   tabsContainer: {
     flexDirection: "row",
-    backgroundColor: "#000000",
-    borderBottomWidth: 0.5,
-    borderBottomColor: "#333",
+    backgroundColor: "transparent",
   },
   tab: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 16,
     alignItems: "center",
-    paddingVertical: 10,
-    borderBottomWidth: 3,
-    borderBottomColor: "transparent",
+    paddingVertical: 2, // espaço mínimo, só o necessário pra área de toque
+    backgroundColor: "transparent",
   },
   activeTab: {
     borderBottomColor: "transparent",
+    backgroundColor: "transparent", // mantém transparente também quando ativa
   },
   tabText: {
-    color: "#666",
+    color: "transparent",
     fontSize: 13,
     fontWeight: "600",
   },
   activeTabText: {
-    color: "#026cdf",
+    color: "transparent",
   },
   ticketsHorizontalScroll: {
     flex: 1,
   },
   ticketPageWrapper: {
-    width: SCREEN_WIDTH, 
+    width: SCREEN_WIDTH,
+    flex: 1, // ocupa toda a altura disponível do ScrollView, eliminando espaço vazio
     alignItems: "center",
-    justifyContent: "center",
-    paddingVertical: 8,
+    justifyContent: "flex-start",
+    paddingHorizontal: 8,
+    paddingTop: 6,
+    paddingBottom: 10,
   },
   ticketCardWrapper: {
-    width: CARD_WIDTH, 
+    width: CARD_WIDTH,
+    flex: 1, // o card preenche o espaço restante em qualquer altura de tela
     backgroundColor: "#ffffff",
     borderRadius: 16,
     overflow: "hidden",
@@ -536,7 +540,7 @@ const styles = StyleSheet.create({
   },
   ticketImageContainer: {
     width: "100%",
-    aspectRatio: 16 / 8.5,
+    flex: 1, // a imagem cresce/encolhe para ocupar o espaço que sobra no card
     backgroundColor: "#026cdf",
     position: "relative",
   },
@@ -651,7 +655,7 @@ const styles = StyleSheet.create({
   returnButton: {
     flexDirection: "row",
     alignItems: "center",
-    marginTop: 14,
+    marginTop: 10,
   },
   returnIcon: {
     marginRight: 6,
