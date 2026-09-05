@@ -336,9 +336,9 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: 2,
   },
-  ticketsHorizontalScroll: {
-    flex: 1,
-  },
+ticketsHorizontalScroll: {
+  flexGrow: 0,
+},
   ticketPageWrapper: {
     width: SCREEN_WIDTH,
     flex: 1,
