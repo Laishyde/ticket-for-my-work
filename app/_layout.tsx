@@ -1,7 +1,7 @@
 import {
-    DarkTheme,
-    DefaultTheme,
-    ThemeProvider,
+  DarkTheme,
+  DefaultTheme,
+  ThemeProvider,
 } from "@react-navigation/native";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
@@ -31,7 +31,7 @@ export default function RootLayout() {
         <ThemeProvider
           value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
         >
-          <View style={{ flex: 1, minHeight: "100vh" }}>
+          <View style={{ flex: 1 }}>
             <Stack screenOptions={{ headerShown: false }} />
           </View>
           <StatusBar style="auto" />
