@@ -17,7 +17,7 @@ import {
 } from "react-native";
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
-const CARD_WIDTH = SCREEN_WIDTH * 0.95; 
+const CARD_WIDTH = SCREEN_WIDTH * 0.9; 
 
 interface Ticket {
   id: number;
@@ -499,7 +499,7 @@ const styles = StyleSheet.create({
   tab: {
     paddingHorizontal: 16,
     alignItems: "center",
-    paddingVertical: 4, // espaço mínimo, só o necessário pra área de toque
+    paddingVertical: 2, // espaço mínimo, só o necessário pra área de toque
     backgroundColor: "transparent",
   },
   activeTab: {
@@ -507,24 +507,28 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent", // mantém transparente também quando ativa
   },
   tabText: {
-    color: "#666",
+    color: "transparent",
     fontSize: 13,
     fontWeight: "600",
   },
   activeTabText: {
-    color: "#026cdf",
+    color: "transparent",
   },
   ticketsHorizontalScroll: {
     flex: 1,
   },
   ticketPageWrapper: {
     width: SCREEN_WIDTH,
+    flex: 1, // ocupa toda a altura disponível do ScrollView, eliminando espaço vazio
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "flex-start",
     paddingHorizontal: 8,
+    paddingTop: 6,
+    paddingBottom: 10,
   },
   ticketCardWrapper: {
     width: CARD_WIDTH,
+    flex: 1, // o card preenche o espaço restante em qualquer altura de tela
     backgroundColor: "#ffffff",
     borderRadius: 16,
     overflow: "hidden",
@@ -536,7 +540,7 @@ const styles = StyleSheet.create({
   },
   ticketImageContainer: {
     width: "100%",
-    aspectRatio: 16 / 8, // proporção de banner, ocupa 100% da largura sem deixar o container alto
+    flex: 1, // a imagem cresce/encolhe para ocupar o espaço que sobra no card
     backgroundColor: "#026cdf",
     position: "relative",
   },
@@ -559,15 +563,15 @@ const styles = StyleSheet.create({
   whiteSection: {
     backgroundColor: "#ffffff",
     paddingHorizontal: 16,
-    paddingVertical: 8,
+    paddingVertical: 12,
   },
   qrRow: {
     flexDirection: "row",
     alignItems: "center",
   },
   qrImageContainer: {
-    width: 96,
-    height: 96,
+    width: 120,
+    height: 120,
     flexShrink: 0,
   },
   qrImage: {
@@ -577,7 +581,7 @@ const styles = StyleSheet.create({
   },
   qrRightInfo: {
     flex: 1,
-    height: 96,
+    height: 120,
     paddingLeft: 16,
     justifyContent: "space-between",
   },
@@ -620,13 +624,12 @@ const styles = StyleSheet.create({
   },
   graySection: {
     backgroundColor: "#f8f9fa",
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+    padding: 16,
   },
   gridContainer: {
     flexDirection: "row",
     flexWrap: "wrap",
-    rowGap: 10,
+    rowGap: 16,
   },
   gridItem: {
     width: "50%",
