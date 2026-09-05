@@ -1,8 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import {
-  Animated,
   Dimensions,
   Image,
   NativeScrollEvent,
@@ -16,8 +15,8 @@ import {
   View
 } from "react-native";
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
-const CARD_WIDTH = SCREEN_WIDTH * 0.9; 
+const { width: SCREEN_WIDTH } = Dimensions.get("window");
+const CARD_WIDTH = SCREEN_WIDTH * 0.95;
 
 interface Ticket {
   id: number;
@@ -38,207 +37,116 @@ interface Ticket {
   image: any;
 }
 
+// Pega a proporção real (largura/altura) da imagem do ingresso, pra ela nunca
+// ser cortada nem esticada, seja lá qual for o tamanho do arquivo .png usado.
+const getImageAspectRatio = (image: any, fallback = 3 / 2) => {
+  try {
+    const source = Image.resolveAssetSource(image);
+    if (source?.width && source?.height) {
+      return source.width / source.height;
+    }
+  } catch (e) {
+    // se não conseguir resolver, usa a proporção padrão
+  }
+  return fallback;
+};
+
 const getRockInRioDate = (dayOffset: number) => {
   const baseDate = new Date(2026, 8, 4);
   const targetDate = new Date(baseDate);
   targetDate.setDate(baseDate.getDate() + dayOffset);
-  
+
   const currentDay = targetDate.getDate();
   const currentMonth = targetDate.getMonth() + 1;
   const currentYear = targetDate.getFullYear();
-  
-  // Corrigido: faltava "Sexta-feira" no array (tinha só 6 dias em vez de 7)
+
   const daysOfWeek = ["Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"];
   const dayOfWeek = daysOfWeek[targetDate.getDay()];
-  
+
   return {
     data: `${dayOfWeek} · ${currentDay.toString().padStart(2, '0')}/${currentMonth.toString().padStart(2, '0')}/${currentYear.toString().slice(-2)} · 14:00`,
     headerData: `${currentDay.toString().padStart(2, '0')}/${currentMonth.toString().padStart(2, '0')}/${currentYear} - Rio de Janeiro`
   };
 };
 
-const tickets = [
+const rawTickets = [
   {
-    id: 1,
-    tab: "1",
-    evento: "Rock in Rio 2026",
-    data: getRockInRioDate(0).data,
-    headerData: getRockInRioDate(0).headerData,
-    local: "Cidade do Rock",
-    setor: "Gramado",
-    secao: "INTEIRA",
-    entrada: "Últ. Acesso: 00h",
-    valor: "R$ 870,00",
-    total: "R$ 870,00",
-    qr: "RIR2026-DIA4-GRAMADO-1",
-    valorTipo: "Benefício Itaú 15%",
-    abertura: "14:00",
-    inicio: "14:00",
-    image: require("../../assets/images/dia-4.png"),
+    id: 1, tab: "1", evento: "Rock in Rio 2026", ...getRockInRioDate(0),
+    local: "Cidade do Rock", setor: "Gramado", secao: "INTEIRA",
+    entrada: "Últ. Acesso: 00h", valor: "R$ 870,00", total: "R$ 870,00",
+    qr: "RIR2026-DIA4-GRAMADO-1", valorTipo: "Benefício Itaú 15%",
+    abertura: "14:00", inicio: "14:00", image: require("../../assets/images/dia-4.png"),
   },
   {
-    id: 2,
-    tab: "2",
-    evento: "Rock in Rio 2026",
-    data: getRockInRioDate(1).data,
-    headerData: getRockInRioDate(1).headerData,
-    local: "Cidade do Rock",
-    setor: "Gramado",
-    secao: "INTEIRA",
-    entrada: "Últ. Acesso: 00h",
-    valor: "R$ 870,00",
-    total: "R$ 870,00",
-    qr: "RIR2026-DIA5-GRAMADO-2",
-    valorTipo: "Benefício Itaú 15%",
-    abertura: "14:00",
-    inicio: "14:00",
-    image: require("../../assets/images/dia-5.png"),
+    id: 2, tab: "2", evento: "Rock in Rio 2026", ...getRockInRioDate(1),
+    local: "Cidade do Rock", setor: "Gramado", secao: "INTEIRA",
+    entrada: "Últ. Acesso: 00h", valor: "R$ 870,00", total: "R$ 870,00",
+    qr: "RIR2026-DIA5-GRAMADO-2", valorTipo: "Benefício Itaú 15%",
+    abertura: "14:00", inicio: "14:00", image: require("../../assets/images/dia-5.png"),
   },
   {
-    id: 3,
-    tab: "3",
-    evento: "Rock in Rio 2026",
-    data: getRockInRioDate(2).data,
-    headerData: getRockInRioDate(2).headerData,
-    local: "Cidade do Rock",
-    setor: "Gramado",
-    secao: "INTEIRA",
-    entrada: "Últ. Acesso: 00h",
-    valor: "R$ 870,00",
-    total: "R$ 870,00",
-    qr: "RIR2026-DIA6-GRAMADO-3",
-    valorTipo: "Benefício Itaú 15%",
-    abertura: "14:00",
-    inicio: "14:00",
-    image: require("../../assets/images/dia-6.png"),
+    id: 3, tab: "3", evento: "Rock in Rio 2026", ...getRockInRioDate(2),
+    local: "Cidade do Rock", setor: "Gramado", secao: "INTEIRA",
+    entrada: "Últ. Acesso: 00h", valor: "R$ 870,00", total: "R$ 870,00",
+    qr: "RIR2026-DIA6-GRAMADO-3", valorTipo: "Benefício Itaú 15%",
+    abertura: "14:00", inicio: "14:00", image: require("../../assets/images/dia-6.png"),
   },
   {
-    id: 4,
-    tab: "4",
-    evento: "Rock in Rio 2026",
-    data: getRockInRioDate(3).data,
-    headerData: getRockInRioDate(3).headerData,
-    local: "Cidade do Rock",
-    setor: "Gramado",
-    secao: "INTEIRA",
-    entrada: "Últ. Acesso: 00h",
-    valor: "R$ 870,00",
-    total: "R$ 870,00",
-    qr: "RIR2026-DIA7-GRAMADO-4",
-    valorTipo: "Benefício Itaú 15%",
-    abertura: "14:00",
-    inicio: "14:00",
-    image: require("../../assets/images/dia-7.png"),
+    id: 4, tab: "4", evento: "Rock in Rio 2026", ...getRockInRioDate(3),
+    local: "Cidade do Rock", setor: "Gramado", secao: "INTEIRA",
+    entrada: "Últ. Acesso: 00h", valor: "R$ 870,00", total: "R$ 870,00",
+    qr: "RIR2026-DIA7-GRAMADO-4", valorTipo: "Benefício Itaú 15%",
+    abertura: "14:00", inicio: "14:00", image: require("../../assets/images/dia-7.png"),
   },
   {
-    id: 5,
-    tab: "5",
-    evento: "Rock in Rio 2026",
-    data: getRockInRioDate(4).data,
-    headerData: getRockInRioDate(4).headerData,
-    local: "Cidade do Rock",
-    setor: "Gramado",
-    secao: "INTEIRA",
-    entrada: "Últ. Acesso: 00h",
-    valor: "R$ 870,00",
-    total: "R$ 870,00",
-    qr: "RIR2026-DIA8-GRAMADO-5",
-    valorTipo: "Benefício Itaú 15%",
-    abertura: "14:00",
-    inicio: "14:00",
-    image: require("../../assets/images/dia-8.png"),
+    id: 5, tab: "5", evento: "Rock in Rio 2026", ...getRockInRioDate(4),
+    local: "Cidade do Rock", setor: "Gramado", secao: "INTEIRA",
+    entrada: "Últ. Acesso: 00h", valor: "R$ 870,00", total: "R$ 870,00",
+    qr: "RIR2026-DIA8-GRAMADO-5", valorTipo: "Benefício Itaú 15%",
+    abertura: "14:00", inicio: "14:00", image: require("../../assets/images/dia-8.png"),
   },
   {
-    id: 6,
-    tab: "6",
-    evento: "Rock in Rio 2026",
-    data: getRockInRioDate(5).data,
-    headerData: getRockInRioDate(5).headerData,
-    local: "Cidade do Rock",
-    setor: "Gramado",
-    secao: "INTEIRA",
-    entrada: "Últ. Acesso: 00h",
-    valor: "R$ 870,00",
-    total: "R$ 870,00",
-    qr: "RIR2026-DIA9-GRAMADO-6",
-    valorTipo: "Benefício Itaú 15%",
-    abertura: "14:00",
-    inicio: "14:00",
-    image: require("../../assets/images/dia-9.png"),
+    id: 6, tab: "6", evento: "Rock in Rio 2026", ...getRockInRioDate(5),
+    local: "Cidade do Rock", setor: "Gramado", secao: "INTEIRA",
+    entrada: "Últ. Acesso: 00h", valor: "R$ 870,00", total: "R$ 870,00",
+    qr: "RIR2026-DIA9-GRAMADO-6", valorTipo: "Benefício Itaú 15%",
+    abertura: "14:00", inicio: "14:00", image: require("../../assets/images/dia-9.png"),
   },
   {
-    id: 7,
-    tab: "7",
-    evento: "Rock in Rio 2026",
-    data: getRockInRioDate(6).data,
-    headerData: getRockInRioDate(6).headerData,
-    local: "Cidade do Rock",
-    setor: "Gramado",
-    secao: "INTEIRA",
-    entrada: "Últ. Acesso: 00h",
-    valor: "R$ 870,00",
-    total: "R$ 870,00",
-    qr: "RIR2026-DIA10-GRAMADO-7",
-    valorTipo: "Benefício Itaú 15%",
-    abertura: "14:00",
-    inicio: "14:00",
-    image: require("../../assets/images/dia-10.png"),
+    id: 7, tab: "7", evento: "Rock in Rio 2026", ...getRockInRioDate(6),
+    local: "Cidade do Rock", setor: "Gramado", secao: "INTEIRA",
+    entrada: "Últ. Acesso: 00h", valor: "R$ 870,00", total: "R$ 870,00",
+    qr: "RIR2026-DIA10-GRAMADO-7", valorTipo: "Benefício Itaú 15%",
+    abertura: "14:00", inicio: "14:00", image: require("../../assets/images/dia-10.png"),
   },
   {
-    id: 8,
-    tab: "8",
-    evento: "Rock in Rio 2026",
-    data: getRockInRioDate(7).data,
-    headerData: getRockInRioDate(7).headerData,
-    local: "Cidade do Rock",
-    setor: "Gramado",
-    secao: "INTEIRA",
-    entrada: "Últ. Acesso: 00h",
-    valor: "R$ 870,00",
-    total: "R$ 870,00",
-    qr: "RIR2026-DIA11-GRAMADO-8",
-    valorTipo: "Benefício Itaú 15%",
-    abertura: "14:00",
-    inicio: "14:00",
-    image: require("../../assets/images/dia-11.png"),
+    id: 8, tab: "8", evento: "Rock in Rio 2026", ...getRockInRioDate(7),
+    local: "Cidade do Rock", setor: "Gramado", secao: "INTEIRA",
+    entrada: "Últ. Acesso: 00h", valor: "R$ 870,00", total: "R$ 870,00",
+    qr: "RIR2026-DIA11-GRAMADO-8", valorTipo: "Benefício Itaú 15%",
+    abertura: "14:00", inicio: "14:00", image: require("../../assets/images/dia-11.png"),
   },
   {
-    id: 9,
-    tab: "9",
-    evento: "Rock in Rio 2026",
-    data: getRockInRioDate(8).data,
-    headerData: getRockInRioDate(8).headerData,
-    local: "Cidade do Rock",
-    setor: "Gramado",
-    secao: "INTEIRA",
-    entrada: "Últ. Acesso: 00h",
-    valor: "R$ 870,00",
-    total: "R$ 870,00",
-    qr: "RIR2026-DIA12-GRAMADO-9",
-    valorTipo: "Benefício Itaú 15%",
-    abertura: "14:00",
-    inicio: "14:00",
-    image: require("../../assets/images/dia-12.png"),
+    id: 9, tab: "9", evento: "Rock in Rio 2026", ...getRockInRioDate(8),
+    local: "Cidade do Rock", setor: "Gramado", secao: "INTEIRA",
+    entrada: "Últ. Acesso: 00h", valor: "R$ 870,00", total: "R$ 870,00",
+    qr: "RIR2026-DIA12-GRAMADO-9", valorTipo: "Benefício Itaú 15%",
+    abertura: "14:00", inicio: "14:00", image: require("../../assets/images/dia-12.png"),
   },
   {
-    id: 10,
-    tab: "10",
-    evento: "Rock in Rio 2026",
-    data: getRockInRioDate(9).data,
-    headerData: getRockInRioDate(9).headerData,
-    local: "Cidade do Rock",
-    setor: "Gramado",
-    secao: "INTEIRA",
-    entrada: "Últ. Acesso: 00h",
-    valor: "R$ 870,00",
-    total: "R$ 870,00",
-    qr: "RIR2026-DIA13-GRAMADO-10",
-    valorTipo: "Benefício Itaú 15%",
-    abertura: "14:00",
-    inicio: "14:00",
-    image: require("../../assets/images/dia-13.png"),
+    id: 10, tab: "10", evento: "Rock in Rio 2026", ...getRockInRioDate(9),
+    local: "Cidade do Rock", setor: "Gramado", secao: "INTEIRA",
+    entrada: "Últ. Acesso: 00h", valor: "R$ 870,00", total: "R$ 870,00",
+    qr: "RIR2026-DIA13-GRAMADO-10", valorTipo: "Benefício Itaú 15%",
+    abertura: "14:00", inicio: "14:00", image: require("../../assets/images/dia-13.png"),
   },
 ];
+
+// Cada ingresso já carrega sua própria proporção de imagem calculada uma única vez.
+const tickets: (Ticket & { aspectRatio: number })[] = rawTickets.map((t) => ({
+  ...t,
+  aspectRatio: getImageAspectRatio(t.image),
+}));
 
 export default function TicketsScreen() {
   const [selectedTicket, setSelectedTicket] = useState(0);
@@ -246,44 +154,13 @@ export default function TicketsScreen() {
   const router = useRouter();
 
   const ticketScrollRef = useRef<ScrollView>(null);
-  const tabsScrollRef = useRef<ScrollView>(null);
-  const animatedValue = useRef(new Animated.Value(0)).current;
-
-  useEffect(() => {
-    const startAnimation = () => {
-      animatedValue.setValue(0);
-      Animated.timing(animatedValue, {
-        toValue: 1,
-        duration: 6000,
-        useNativeDriver: false,
-      }).start(() => startAnimation());
-    };
-    startAnimation();
-  }, [animatedValue]);
-
-  const barWidth = animatedValue.interpolate({
-    inputRange: [0, 1],
-    outputRange: ["100%", "0%"],
-  });
 
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const contentOffset = event.nativeEvent.contentOffset.x;
     const index = Math.round(contentOffset / SCREEN_WIDTH);
     if (index >= 0 && index < tickets.length && index !== selectedTicket) {
       setSelectedTicket(index);
-      tabsScrollRef.current?.scrollTo({
-        x: index * 60,
-        animated: true,
-      });
     }
-  };
-
-  const handleTabPress = (index: number) => {
-    setSelectedTicket(index);
-    ticketScrollRef.current?.scrollTo({
-      x: index * SCREEN_WIDTH,
-      animated: true,
-    });
   };
 
   return (
@@ -296,7 +173,7 @@ export default function TicketsScreen() {
           style={styles.backButton}
           onPress={() => router.replace("/")}
         >
-          <Ionicons name="chevron-back" size={24} color="#9ca3af" /> 
+          <Ionicons name="chevron-back" size={24} color="#9ca3af" />
         </TouchableOpacity>
         <View style={styles.headerTextContainer}>
           <Text style={styles.headerTitle} numberOfLines={1}>
@@ -306,35 +183,8 @@ export default function TicketsScreen() {
         </View>
       </View>
 
-      {/* Abas Superiores de Seleção */}
-      <View style={styles.tabsContainer}>
-        <ScrollView 
-          ref={tabsScrollRef}
-          horizontal 
-          showsHorizontalScrollIndicator={false} 
-          style={{ width: "100%" }}
-        >
-          {tickets.map((ticket, index) => (
-            <TouchableOpacity
-              key={ticket.id}
-              style={[styles.tab, selectedTicket === index && styles.activeTab]}
-              onPress={() => handleTabPress(index)}
-              activeOpacity={0.8}
-            >
-              <Text
-                style={[
-                  styles.tabText,
-                  selectedTicket === index && styles.activeTabText,
-                ]}
-              >
-                {ticket.tab || index + 1}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
-      </View>
-
-      {/* Scroll de Ingressos — agora cada página ocupa 100% da altura disponível (sem espaço sobrando) */}
+      {/* Scroll de Ingressos: arraste para o lado para trocar de dia. Sem
+          barra de números — o próprio card é o indicador de navegação. */}
       <ScrollView
         ref={ticketScrollRef}
         horizontal
@@ -343,29 +193,24 @@ export default function TicketsScreen() {
         onScroll={handleScroll}
         scrollEventThrottle={16}
         style={styles.ticketsHorizontalScroll}
-        contentContainerStyle={{ alignItems: "stretch" }}
       >
         {tickets.map((ticket, index) => (
           <View key={ticket.id} style={styles.ticketPageWrapper}>
-
             <View style={styles.ticketCardWrapper}>
-              
-              {/* Parte Superior: Imagem preenche o espaço flexível restante */}
-              <View style={styles.ticketImageContainer}>
+
+              {/* Imagem do ingresso, na proporção exata do arquivo — sem cortar, sem esticar */}
+              <View style={[styles.ticketImageContainer, { aspectRatio: ticket.aspectRatio }]}>
                 <Image
                   source={ticket.image}
                   style={styles.ticketCoverImage}
-                  resizeMode="cover"
+                  resizeMode="contain"
                 />
-                
                 <View style={styles.overlayBarContainer}>
-                  <Animated.View 
+                  <View
                     style={[
-                      styles.progressBar, 
-                      { 
-                        width: selectedTicket === index ? barWidth : "100%", 
-                      }
-                    ]} 
+                      styles.progressBar,
+                      { width: selectedTicket === index ? "35%" : "100%" },
+                    ]}
                   />
                 </View>
               </View>
@@ -435,12 +280,11 @@ export default function TicketsScreen() {
                   </View>
                 </View>
               </View>
-
             </View>
 
             {/* Ação de Devolver Ingresso */}
             <TouchableOpacity style={styles.returnButton} activeOpacity={0.7}>
-              <Ionicons name="arrow-undo" size={16} color="#0084ff" style={styles.returnIcon} />
+              <Ionicons name="arrow-undo" size={16} color="#ffffff" style={styles.returnIcon} />
               <Text style={styles.returnText}>Devolver ingresso</Text>
             </TouchableOpacity>
           </View>
@@ -492,43 +336,18 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: 2,
   },
-  tabsContainer: {
-    flexDirection: "row",
-    backgroundColor: "transparent",
-  },
-  tab: {
-    paddingHorizontal: 16,
-    alignItems: "center",
-    paddingVertical: 2, // espaço mínimo, só o necessário pra área de toque
-    backgroundColor: "transparent",
-  },
-  activeTab: {
-    borderBottomColor: "transparent",
-    backgroundColor: "transparent", // mantém transparente também quando ativa
-  },
-  tabText: {
-    color: "transparent",
-    fontSize: 13,
-    fontWeight: "600",
-  },
-  activeTabText: {
-    color: "transparent",
-  },
   ticketsHorizontalScroll: {
     flex: 1,
   },
   ticketPageWrapper: {
     width: SCREEN_WIDTH,
-    flex: 1, // ocupa toda a altura disponível do ScrollView, eliminando espaço vazio
+    flex: 1,
     alignItems: "center",
-    justifyContent: "flex-start",
+    justifyContent: "center",
     paddingHorizontal: 8,
-    paddingTop: 6,
-    paddingBottom: 10,
   },
   ticketCardWrapper: {
     width: CARD_WIDTH,
-    flex: 1, // o card preenche o espaço restante em qualquer altura de tela
     backgroundColor: "#ffffff",
     borderRadius: 16,
     overflow: "hidden",
@@ -540,7 +359,6 @@ const styles = StyleSheet.create({
   },
   ticketImageContainer: {
     width: "100%",
-    flex: 1, // a imagem cresce/encolhe para ocupar o espaço que sobra no card
     backgroundColor: "#026cdf",
     position: "relative",
   },
@@ -550,10 +368,10 @@ const styles = StyleSheet.create({
   },
   overlayBarContainer: {
     position: "absolute",
-    bottom: 0, 
+    bottom: 0,
     left: 0,
     right: 0,
-    height: 6,
+    height: 4,
     backgroundColor: "transparent",
   },
   progressBar: {
@@ -570,8 +388,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   qrImageContainer: {
-    width: 120,
-    height: 120,
+    width: 110,
+    height: 110,
     flexShrink: 0,
   },
   qrImage: {
@@ -581,7 +399,7 @@ const styles = StyleSheet.create({
   },
   qrRightInfo: {
     flex: 1,
-    height: 120,
+    height: 110,
     paddingLeft: 16,
     justifyContent: "space-between",
   },
@@ -624,12 +442,13 @@ const styles = StyleSheet.create({
   },
   graySection: {
     backgroundColor: "#f8f9fa",
-    padding: 16,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
   },
   gridContainer: {
     flexDirection: "row",
     flexWrap: "wrap",
-    rowGap: 16,
+    rowGap: 10,
   },
   gridItem: {
     width: "50%",
@@ -655,7 +474,8 @@ const styles = StyleSheet.create({
   returnButton: {
     flexDirection: "row",
     alignItems: "center",
-    marginTop: 10,
+    justifyContent: "center",
+    marginTop: 12,
   },
   returnIcon: {
     marginRight: 6,
@@ -668,18 +488,21 @@ const styles = StyleSheet.create({
   customFooter: {
     marginHorizontal: 16,
     marginBottom: 12,
-    paddingHorizontal: 16,
+    paddingHorizontal: 12,
     paddingVertical: 10,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    backgroundColor: "rgba(111, 90, 75, 0.15)",
-    borderRadius: 12,
+    gap: 10,
   },
   footerLink: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+    borderWidth: 1,
+    borderColor: "rgba(200, 182, 167, 0.4)",
+    borderRadius: 8,
+    paddingVertical: 8,
   },
   footerLinkText: {
     fontSize: 11,
@@ -688,7 +511,6 @@ const styles = StyleSheet.create({
   },
   footerButton: {
     flex: 1,
-    backgroundColor: "rgba(111, 90, 75, 0.1)",
     borderWidth: 1,
     borderColor: "rgba(200, 182, 167, 0.4)",
     borderRadius: 8,
