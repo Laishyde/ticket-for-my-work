@@ -19,6 +19,9 @@ const MAPPING: IconMapping = {
   "paperplane.fill": "send",
   "chevron.left.forwardslash.chevron.right": "code",
   "chevron.right": "chevron-right",
+  "chevron.left": "chevron-left",
+  "chevron.down": "expand-more",
+  "chevron.up": "expand-less",
   "battery.full": "battery-full",
   "battery.charging": "battery-charging-full",
   wifi: "wifi",
@@ -43,7 +46,15 @@ const MAPPING: IconMapping = {
   sportscourt: "sports-basketball",
   cpu: "memory",
   "arrow.right.arrow.left": "swap-horiz",
-  "chevron.down": "expand-more",
+  bell: "notifications",
+  "bell.fill": "notifications-active",
+  creditcard: "credit-card",
+  lock: "lock",
+  "lock.fill": "lock",
+  "questionmark.circle": "help-outline",
+  "questionmark.circle.fill": "help",
+  "arrow.right.square": "logout",
+  "arrow.right.square.fill": "logout",
 };
 
 /**
