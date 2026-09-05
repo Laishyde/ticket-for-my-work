@@ -260,7 +260,6 @@ export default function TicketsScreen() {
 
   const ticketScrollRef = useRef<ScrollView>(null);
 
-  /* Progresso de crescimento em loop infinito (0% -> 100%) */
   const progressAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -268,7 +267,7 @@ export default function TicketsScreen() {
     const animation = Animated.loop(
       Animated.timing(progressAnim, {
         toValue: 1,
-        duration: 4000, // Ajustado para ser suave e moderadamente mais rápido
+        duration: 4000,
         easing: Easing.linear,
         useNativeDriver: false,
       })
@@ -342,7 +341,6 @@ export default function TicketsScreen() {
       >
         {tickets.map((ticket, index) => (
           <View key={ticket.id} style={styles.ticketPageWrapper}>
-            {/* Overlays de toque invisíveis */}
             <TouchableOpacity
               style={styles.hitLeft}
               activeOpacity={1}
@@ -355,7 +353,6 @@ export default function TicketsScreen() {
             />
 
             <View style={styles.ticketCardWrapper} pointerEvents="box-none">
-              {/* Imagem do ingresso exibida via resizeMode="contain" */}
               <View
                 style={[
                   styles.ticketImageContainer,
@@ -368,7 +365,6 @@ export default function TicketsScreen() {
                   resizeMode="contain"
                 />
 
-                {/* Barra de progresso verde de crescimento em loop infinito */}
                 <View style={styles.overlayBarContainer}>
                   <Animated.View
                     style={[
@@ -381,7 +377,6 @@ export default function TicketsScreen() {
                 </View>
               </View>
 
-              {/* Parte Central Branca */}
               <View style={styles.whiteSection}>
                 <View style={styles.qrRow}>
                   <View style={styles.qrImageContainer}>
@@ -421,40 +416,42 @@ export default function TicketsScreen() {
                 </View>
               </View>
 
-              {/* Divisória Serrilhada */}
               <View style={styles.dashedContainer}>
                 <View style={styles.dashedLine} />
               </View>
 
-              {/* Parte Inferior Cinza */}
+              {/* SEÇÃO DE INFORMAÇÕES - AJUSTADA COM FONTES E PESOS DA FOTO */}
               <View style={styles.graySection}>
                 <View style={styles.gridContainer}>
-                  <View style={styles.gridItem}>
-                    <Text style={styles.gridLabel}>Taxa</Text>
-                    <Text style={styles.gridValue}>{ticket.valorTipo}</Text>
+                  {/* Linha 1: TAXA */}
+                  <View style={styles.gridItemFull}>
+                    <Text style={styles.gridLabel}>TAXA</Text>
+                    <Text style={styles.gridValueBold}>{ticket.valor}</Text>
                   </View>
-                  <View style={styles.gridItem} />
+
+                  {/* Linha 2: SEÇÃO e FILEIRA */}
                   <View style={styles.gridItem}>
-                    <Text style={styles.gridLabel}>Seção</Text>
+                    <Text style={styles.gridLabel}>SEÇÃO</Text>
                     <Text style={styles.gridValueBold}>{ticket.secao}</Text>
                   </View>
                   <View style={styles.gridItem}>
-                    <Text style={styles.gridLabel}>Fileira</Text>
-                    <Text style={styles.gridValue}>Não numerado</Text>
+                    <Text style={styles.gridLabel}>FILEIRA</Text>
+                    <Text style={styles.gridValueRegular}>Não numerado</Text>
+                  </View>
+
+                  {/* Linha 3: ABERTURA e INÍCIO */}
+                  <View style={styles.gridItem}>
+                    <Text style={styles.gridLabel}>ABERTURA</Text>
+                    <Text style={styles.gridValueBold}>{ticket.abertura}</Text>
                   </View>
                   <View style={styles.gridItem}>
-                    <Text style={styles.gridLabel}>Abertura</Text>
-                    <Text style={styles.gridValue}>{ticket.abertura}</Text>
-                  </View>
-                  <View style={styles.gridItem}>
-                    <Text style={styles.gridLabel}>Início</Text>
-                    <Text style={styles.gridValue}>{ticket.inicio}</Text>
+                    <Text style={styles.gridLabel}>INÍCIO</Text>
+                    <Text style={styles.gridValueBold}>{ticket.inicio}</Text>
                   </View>
                 </View>
               </View>
             </View>
 
-            {/* Ação de Devolver Ingresso */}
             <TouchableOpacity style={styles.returnButton} activeOpacity={0.7}>
               <Ionicons
                 name="arrow-undo"
@@ -468,7 +465,6 @@ export default function TicketsScreen() {
         ))}
       </ScrollView>
 
-      {/* Rodapé Fixo */}
       <View style={styles.customFooter}>
         <TouchableOpacity style={styles.footerLink} activeOpacity={0.7}>
           <Text style={styles.footerLinkText}>Ingresso intransferível</Text>
@@ -521,9 +517,6 @@ const styles = StyleSheet.create({
     marginTop: 1,
   },
 
-  /*
-   * ÁREA DOS INGRESSOS
-   */
   ticketsHorizontalScroll: {
     flex: 1,
   },
@@ -565,9 +558,6 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent",
   },
 
-  /*
-   * CARTÃO
-   */
   ticketCardWrapper: {
     width: CARD_WIDTH,
     minHeight: 0,
@@ -587,9 +577,6 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
 
-  /*
-   * CONTAINER DA IMAGEM
-   */
   ticketImageContainer: {
     width: "100%",
     backgroundColor: "#06131d",
@@ -602,15 +589,12 @@ const styles = StyleSheet.create({
     height: "100%",
   },
 
-  /*
-   * BARRA DE PROGRESSO VERDE
-   */
   overlayBarContainer: {
     position: "absolute",
     bottom: 0,
     left: 0,
     right: 0,
-    height: 6, // Espessura ajustada para 6px
+    height: 6,
     backgroundColor: "rgba(0, 0, 0, 0.2)",
     overflow: "hidden",
   },
@@ -620,9 +604,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#02e1c1",
   },
 
-  /*
-   * INFORMAÇÕES DO QR CODE
-   */
   whiteSection: {
     backgroundColor: "#ffffff",
     paddingHorizontal: 14,
@@ -635,8 +616,8 @@ const styles = StyleSheet.create({
   },
 
   qrImageContainer: {
-    width: 92,
-    height: 92,
+    width: 112,
+    height: 112,
     flexShrink: 0,
   },
 
@@ -647,7 +628,7 @@ const styles = StyleSheet.create({
 
   qrRightInfo: {
     flex: 1,
-    height: 92,
+    height: 112,
     paddingLeft: 12,
     justifyContent: "space-between",
   },
@@ -663,8 +644,8 @@ const styles = StyleSheet.create({
 
   cardInfoValue: {
     fontSize: 14,
-    color: "#5f5f5f",
-    fontWeight: "400",
+    color: "#3d3d3d",
+    fontWeight: "600",
   },
 
   moreInfoButton: {
@@ -695,19 +676,21 @@ const styles = StyleSheet.create({
     width: "100%",
   },
 
-  /*
-   * PARTE INFERIOR DO CARTÃO
-   */
+  /* ESTILOS DA ÁREA DE INFORMAÇÕES DO INGRESSO (abaixo da linha pontilhada) */
   graySection: {
     backgroundColor: "#f8f9fa",
-    paddingHorizontal: 14,
-    paddingVertical: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 22,
   },
 
   gridContainer: {
     flexDirection: "row",
     flexWrap: "wrap",
-    rowGap: 6,
+    rowGap: 16,
+  },
+
+  gridItemFull: {
+    width: "100%",
   },
 
   gridItem: {
@@ -715,29 +698,25 @@ const styles = StyleSheet.create({
   },
 
   gridLabel: {
-    color: "#d2cbc2",
+    color: "#a8a8a8",
     fontSize: 9,
-    fontWeight: "700",
+    fontWeight: "600",
     textTransform: "uppercase",
-    marginBottom: 2,
-  },
-
-  gridValue: {
-    color: "#5f5f5f",
-    fontSize: 13,
-    fontWeight: "500",
+    marginBottom: 3,
   },
 
   gridValueBold: {
-    color: "#5f5f5f",
-    fontSize: 13,
+    color: "#333333",
+    fontSize: 15,
     fontWeight: "700",
-    textTransform: "uppercase",
   },
 
-  /*
-   * DEVOLVER INGRESSO
-   */
+  gridValueRegular: {
+    color: "#5f5f5f",
+    fontSize: 15,
+    fontWeight: "500",
+  },
+
   returnButton: {
     flexDirection: "row",
     alignItems: "center",
@@ -760,9 +739,6 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
 
-  /*
-   * FOOTER
-   */
   customFooter: {
     marginHorizontal: 16,
     marginTop: 0,
