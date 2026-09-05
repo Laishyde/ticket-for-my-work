@@ -341,7 +341,6 @@ ticketsHorizontalScroll: {
 },
   ticketPageWrapper: {
     width: SCREEN_WIDTH,
-    flex: 1,
     alignItems: "center",
     justifyContent: "flex-start",
     paddingHorizontal: 8,
@@ -488,7 +487,7 @@ ticketsHorizontalScroll: {
   customFooter: {
     marginHorizontal: 16,
     marginBottom: 12,
-    marginTop: 16,
+    marginTop: 8,
     paddingHorizontal: 12,
     paddingVertical: 10,
     flexDirection: "row",
