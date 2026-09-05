@@ -337,7 +337,7 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
 ticketsHorizontalScroll: {
-  flexGrow: 0,
+  flex: 1,
 },
   ticketPageWrapper: {
     width: SCREEN_WIDTH,
@@ -486,7 +486,7 @@ ticketsHorizontalScroll: {
   },
   customFooter: {
     marginHorizontal: 16,
-    marginBottom: 12,
+    marginBottom: 0,
     marginTop: 8,
     paddingHorizontal: 12,
     paddingVertical: 10,
