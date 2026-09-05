@@ -46,7 +46,7 @@ const getImageAspectRatio = (image: any, fallback = 3 / 2) => {
   } catch (e) {
   }
   return fallback;
-}; 
+};
 
 const getRockInRioDate = (dayOffset: number) => {
   const baseDate = new Date(2026, 8, 4);
@@ -66,7 +66,7 @@ const getRockInRioDate = (dayOffset: number) => {
   };
 };
 
-const tickets = [
+const rawTickets = [
   {
     id: 1, tab: "1", evento: "Rock in Rio 2026", ...getRockInRioDate(0),
     local: "Cidade do Rock", setor: "Gramado", secao: "INTEIRA",
@@ -139,37 +139,24 @@ const tickets = [
   },
 ];
 
-const ticketsWithAspectRatio = tickets.map((ticket) => ({
-  ...ticket,
-  aspectRatio: getImageAspectRatio(ticket.image),
+const tickets: (Ticket & { aspectRatio: number })[] = rawTickets.map((t) => ({
+  ...t,
+  aspectRatio: getImageAspectRatio(t.image),
 }));
 
 export default function TicketsScreen() {
   const [selectedTicket, setSelectedTicket] = useState(0);
-  const currentTicket = ticketsWithAspectRatio[selectedTicket];
+  const currentTicket = tickets[selectedTicket] || tickets[0];
   const router = useRouter();
 
   const ticketScrollRef = useRef<ScrollView>(null);
-  const tabsScrollRef = useRef<ScrollView>(null);
 
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const contentOffset = event.nativeEvent.contentOffset.x;
     const index = Math.round(contentOffset / SCREEN_WIDTH);
-    if (index >= 0 && index < ticketsWithAspectRatio.length && index !== selectedTicket) {
+    if (index >= 0 && index < tickets.length && index !== selectedTicket) {
       setSelectedTicket(index);
-      tabsScrollRef.current?.scrollTo({
-        x: index * 90 - 40,
-        animated: true,
-      });
     }
-  };
-
-  const handleTabPress = (index: number) => {
-    setSelectedTicket(index);
-    ticketScrollRef.current?.scrollTo({
-      x: index * SCREEN_WIDTH,
-      animated: true,
-    });
   };
 
   return (
@@ -182,7 +169,7 @@ export default function TicketsScreen() {
           style={styles.backButton}
           onPress={() => router.replace("/")}
         >
-          <Ionicons name="chevron-back" size={24} color="#9ca3af" /> 
+          <Ionicons name="chevron-back" size={24} color="#9ca3af" />
         </TouchableOpacity>
         <View style={styles.headerTextContainer}>
           <Text style={styles.headerTitle} numberOfLines={1}>
@@ -192,144 +179,116 @@ export default function TicketsScreen() {
         </View>
       </View>
 
-      {/* Abas Superiores de Seleção */}
-      <View style={styles.tabsContainer}>
-        <ScrollView 
-          ref={tabsScrollRef}
-          horizontal 
-          showsHorizontalScrollIndicator={false} 
-          style={{ width: "100%" }}
+      {/* Área flexível dos ingressos */}
+      <View style={styles.ticketsArea}>
+        {/* Scroll de Ingressos: arraste para o lado para trocar de dia. Sem
+            barra de números — o próprio card é o indicador de navegação. */}
+        <ScrollView
+          ref={ticketScrollRef}
+          horizontal
+          pagingEnabled
+          showsHorizontalScrollIndicator={false}
+          onScroll={handleScroll}
+          scrollEventThrottle={16}
+          style={styles.ticketsHorizontalScroll}
         >
-          {ticketsWithAspectRatio.map((ticket, index) => (
-            <TouchableOpacity
-              key={index}
-              style={[styles.tab, selectedTicket === index && styles.activeTab]}
-              onPress={() => handleTabPress(index)}
-              activeOpacity={0.8}
-            >
-              <Text
-                style={[
-                  styles.tabText,
-                  selectedTicket === index && styles.activeTabText,
-                ]}
-              >
-                {ticket.tab}
-              </Text>
-            </TouchableOpacity>
+          {tickets.map((ticket, index) => (
+            <View key={ticket.id} style={styles.ticketPageWrapper}>
+              <View style={styles.ticketCardWrapper}>
+
+                {/* Imagem do ingresso, na proporção exata do arquivo — sem cortar, sem esticar */}
+                <View style={[styles.ticketImageContainer, { aspectRatio: ticket.aspectRatio }]}>
+                  <Image
+                    source={ticket.image}
+                    style={styles.ticketCoverImage}
+                    resizeMode="contain"
+                  />
+                  <View style={styles.overlayBarContainer}>
+                    <View
+                      style={[
+                        styles.progressBar,
+                        { width: selectedTicket === index ? "35%" : "100%" },
+                      ]}
+                    />
+                  </View>
+                </View>
+
+                {/* Parte Central Branca */}
+                <View style={styles.whiteSection}>
+                  <View style={styles.qrRow}>
+                    <View style={styles.qrImageContainer}>
+                      <Image
+                        source={{
+                          uri: `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${ticket.qr}`,
+                        }}
+                        style={styles.qrImage}
+                      />
+                    </View>
+
+                    <View style={styles.qrRightInfo}>
+                      <View>
+                        <Text style={styles.cardInfoLabel}>Setor</Text>
+                        <Text style={styles.cardInfoValue} numberOfLines={1}>
+                          {ticket.setor}
+                        </Text>
+                      </View>
+
+                      <View style={{ marginTop: 8 }}>
+                        <Text style={styles.cardInfoLabel}>Acesso</Text>
+                        <Text style={styles.cardInfoValue} numberOfLines={1}>
+                          {ticket.entrada}
+                        </Text>
+                      </View>
+
+                      <TouchableOpacity style={styles.moreInfoButton} activeOpacity={0.7}>
+                        <Text style={styles.moreInfoButtonText}>Mais informação</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                </View>
+
+                {/* Divisória Serrilhada */}
+                <View style={styles.dashedContainer}>
+                  <View style={styles.dashedLine} />
+                </View>
+
+                {/* Parte Inferior Cinza */}
+                <View style={styles.graySection}>
+                  <View style={styles.gridContainer}>
+                    <View style={styles.gridItem}>
+                      <Text style={styles.gridLabel}>Taxa</Text>
+                      <Text style={styles.gridValue}>{ticket.valorTipo}</Text>
+                    </View>
+                    <View style={styles.gridItem} />
+                    <View style={styles.gridItem}>
+                      <Text style={styles.gridLabel}>Seção</Text>
+                      <Text style={styles.gridValueBold}>{ticket.secao}</Text>
+                    </View>
+                    <View style={styles.gridItem}>
+                      <Text style={styles.gridLabel}>Fileira</Text>
+                      <Text style={styles.gridValue}>Não numerado</Text>
+                    </View>
+                    <View style={styles.gridItem}>
+                      <Text style={styles.gridLabel}>Abertura</Text>
+                      <Text style={styles.gridValue}>{ticket.abertura}</Text>
+                    </View>
+                    <View style={styles.gridItem}>
+                      <Text style={styles.gridLabel}>Início</Text>
+                      <Text style={styles.gridValue}>{ticket.inicio}</Text>
+                    </View>
+                  </View>
+                </View>
+              </View>
+
+              {/* Ação de Devolver Ingresso */}
+              <TouchableOpacity style={styles.returnButton} activeOpacity={0.7}>
+                <Ionicons name="arrow-undo" size={16} color="#0084ff" style={styles.returnIcon} />
+                <Text style={styles.returnText}>Devolver ingresso</Text>
+              </TouchableOpacity>
+            </View>
           ))}
         </ScrollView>
       </View>
-
-      {/* Scroll de Ingressos (Horizontal / Swipable) */}
-      <ScrollView
-        ref={ticketScrollRef}
-        horizontal
-        pagingEnabled
-        showsHorizontalScrollIndicator={false}
-        onScroll={handleScroll}
-        scrollEventThrottle={16}
-        style={styles.ticketsHorizontalScroll}
-      >
-        {ticketsWithAspectRatio.map((ticket, index) => (
-          <View key={ticket.id} style={styles.ticketPageWrapper}>
-            <View style={styles.ticketCardWrapper}>
-              
-              {/* Parte Superior: Imagem */}
-              <View style={[styles.ticketImageContainer, { aspectRatio: ticket.aspectRatio }]}>
-                <Image
-                  source={ticket.image}
-                  style={styles.ticketCoverImage}
-                  resizeMode="contain"
-                />
-                
-                <View style={styles.overlayBarContainer}>
-                  <View 
-                    style={[
-                      styles.progressBar, 
-                      { 
-                        width: selectedTicket === index ? "35%" : "100%", 
-                      }
-                    ]} 
-                  />
-                </View>
-              </View>
-
-              {/* Parte Central Branca */}
-              <View style={styles.whiteSection}>
-                <View style={styles.qrRow}>
-                  <View style={styles.qrImageContainer}>
-                    <Image
-                      source={{
-                        uri: `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${ticket.qr}`,
-                      }}
-                      style={styles.qrImage}
-                    />
-                  </View>
-
-                  <View style={styles.qrRightInfo}>
-                    <View>
-                      <Text style={styles.cardInfoLabel}>Setor</Text>
-                      <Text style={styles.cardInfoValue} numberOfLines={1}>
-                        {ticket.setor}
-                      </Text>
-                    </View>
-
-                    <View style={{ marginTop: 12 }}>
-                      <Text style={styles.cardInfoLabel}>Acesso</Text>
-                      <Text style={styles.cardInfoValue} numberOfLines={1}>
-                        {ticket.entrada}
-                      </Text>
-                    </View>
-
-                    <TouchableOpacity style={styles.moreInfoButton} activeOpacity={0.7}>
-                      <Text style={styles.moreInfoButtonText}>Mais informações</Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              </View>
-
-              {/* Divisória Serrilhada */}
-              <View style={styles.dashedContainer}>
-                <View style={styles.dashedLine} />
-              </View>
-
-              {/* Parte Inferior Cinza */}
-              <View style={styles.graySection}>
-                <View style={styles.gridContainer}>
-                  <View style={styles.gridItem}>
-                    <Text style={styles.gridLabel}>Taxa</Text>
-                    <Text style={styles.gridValue}>{ticket.valorTipo}</Text>
-                  </View>
-                  <View style={styles.gridItem} />
-                  <View style={styles.gridItem}>
-                    <Text style={styles.gridLabel}>Seção</Text>
-                    <Text style={styles.gridValueBold}>{ticket.secao}</Text>
-                  </View>
-                  <View style={styles.gridItem}>
-                    <Text style={styles.gridLabel}>Fileira</Text>
-                    <Text style={styles.gridValue}>Não numerado</Text>
-                  </View>
-                  <View style={styles.gridItem}>
-                    <Text style={styles.gridLabel}>Abertura</Text>
-                    <Text style={styles.gridValue}>{ticket.abertura}</Text>
-                  </View>
-                  <View style={styles.gridItem}>
-                    <Text style={styles.gridLabel}>Início</Text>
-                    <Text style={styles.gridValue}>{ticket.inicio}</Text>
-                  </View>
-                </View>
-              </View>
-
-            </View>
-
-            {/* Ação de Devolver Ingresso */}
-            <TouchableOpacity style={styles.returnButton} activeOpacity={0.7}>
-              <Ionicons name="arrow-undo" size={16} color="#0084ff" style={styles.returnIcon} />
-              <Text style={styles.returnText}>Devolver ingresso</Text>
-            </TouchableOpacity>
-          </View>
-        ))}
-      </ScrollView>
 
       {/* Rodapé Fixo */}
       <View style={styles.customFooter}>
@@ -353,7 +312,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingVertical: 10,
     borderBottomWidth: 1,
     borderBottomColor: "#1f2937",
   },
@@ -376,41 +335,21 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: 2,
   },
-  tabsContainer: {
-    flexDirection: "row",
-    backgroundColor: "#000000",
-    borderBottomWidth: 0.5,
-    borderBottomColor: "#333",
-  },
-  tab: {
-    paddingHorizontal: 20,
-    alignItems: "center",
-    paddingVertical: 14,
-    borderBottomWidth: 3,
-    borderBottomColor: "transparent",
-  },
-  activeTab: {
-    borderBottomColor: "transparent",
-  },
-  tabText: {
-    color: "#666",
-    fontSize: 13,
-    fontWeight: "600",
-  },
-  activeTabText: {
-    color: "#026cdf",
+  ticketsArea: {
+    flex: 1,
+    justifyContent: "flex-start",
   },
   ticketsHorizontalScroll: {
-    flex: 1,
+    flexGrow: 0,
   },
   ticketPageWrapper: {
-    width: SCREEN_WIDTH, 
+    width: SCREEN_WIDTH,
     alignItems: "center",
     justifyContent: "flex-start",
-    marginTop: 10,
+    paddingHorizontal: 8,
   },
   ticketCardWrapper: {
-    width: CARD_WIDTH, 
+    width: CARD_WIDTH,
     backgroundColor: "#ffffff",
     borderRadius: 16,
     overflow: "hidden",
@@ -431,7 +370,7 @@ const styles = StyleSheet.create({
   },
   overlayBarContainer: {
     position: "absolute",
-    bottom: 0, 
+    bottom: 0,
     left: 0,
     right: 0,
     height: 4,
@@ -443,16 +382,16 @@ const styles = StyleSheet.create({
   },
   whiteSection: {
     backgroundColor: "#ffffff",
-    paddingHorizontal: 20,
-    paddingVertical: 16,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
   },
   qrRow: {
     flexDirection: "row",
     alignItems: "center",
   },
   qrImageContainer: {
-    width: 135,
-    height: 135,
+    width: 110,
+    height: 110,
     flexShrink: 0,
   },
   qrImage: {
@@ -462,8 +401,8 @@ const styles = StyleSheet.create({
   },
   qrRightInfo: {
     flex: 1,
-    height: 135,
-    paddingLeft: 20,
+    height: 110,
+    paddingLeft: 16,
     justifyContent: "space-between",
   },
   cardInfoLabel: {
@@ -475,14 +414,14 @@ const styles = StyleSheet.create({
     marginBottom: 2,
   },
   cardInfoValue: {
-    fontSize: 15,
+    fontSize: 14,
     color: "#5f5f5f",
     fontWeight: "400",
   },
   moreInfoButton: {
     backgroundColor: "#dff4f6",
-    paddingHorizontal: 12,
-    paddingVertical: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
     borderRadius: 6,
     alignSelf: "flex-start",
     marginTop: 4,
@@ -494,7 +433,7 @@ const styles = StyleSheet.create({
   },
   dashedContainer: {
     backgroundColor: "#f8f9fa",
-    paddingHorizontal: 24,
+    paddingHorizontal: 16,
   },
   dashedLine: {
     borderWidth: 1,
@@ -505,12 +444,13 @@ const styles = StyleSheet.create({
   },
   graySection: {
     backgroundColor: "#f8f9fa",
-    padding: 24,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
   },
   gridContainer: {
     flexDirection: "row",
     flexWrap: "wrap",
-    rowGap: 24,
+    rowGap: 10,
   },
   gridItem: {
     width: "50%",
@@ -520,16 +460,16 @@ const styles = StyleSheet.create({
     fontSize: 9,
     fontWeight: "700",
     textTransform: "uppercase",
-    marginBottom: 4,
+    marginBottom: 2,
   },
   gridValue: {
     color: "#5f5f5f",
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: "500",
   },
   gridValueBold: {
     color: "#5f5f5f",
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: "700",
     textTransform: "uppercase",
   },
@@ -548,20 +488,24 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
   customFooter: {
+    marginHorizontal: 16,
+    marginBottom: 0,
     marginTop: 8,
-    marginBottom: 16,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    backgroundColor: "rgba(111, 90, 75, 0.15)",
-    borderRadius: 12,
+    gap: 10,
   },
   footerLink: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+    borderWidth: 1,
+    borderColor: "rgba(200, 182, 167, 0.4)",
+    borderRadius: 8,
+    paddingVertical: 8,
   },
   footerLinkText: {
     fontSize: 11,
@@ -570,7 +514,6 @@ const styles = StyleSheet.create({
   },
   footerButton: {
     flex: 1,
-    backgroundColor: "rgba(111, 90, 75, 0.1)",
     borderWidth: 1,
     borderColor: "rgba(200, 182, 167, 0.4)",
     borderRadius: 8,
@@ -583,5 +526,4 @@ const styles = StyleSheet.create({
     fontWeight: "400",
     color: "#c8b6a7",
   },
-  
 });

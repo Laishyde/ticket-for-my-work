@@ -3,12 +3,12 @@ import { Image as ExpoImage } from "expo-image";
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
+    ScrollView,
+    StatusBar,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
 } from "react-native";
 
 // Função com a sua lógica idêntica e intacta, apenas corrigindo a string de exibição
@@ -126,7 +126,7 @@ export default function HomeScreen() {
         >
           <View style={styles.eventImageContainer}>
             <ExpoImage
-              source={require("../../assets/images/lop.jpg")}
+              source={require("../../assets/images/logo.jpg")}
               style={styles.eventImage}
             />
             <View style={styles.tagAgora}>
@@ -136,17 +136,17 @@ export default function HomeScreen() {
 
           <View style={styles.eventInfo}>
             <View style={styles.ticketMeta}>
-              <Text style={styles.ticketCount}>1 ingresso</Text>
+              <Text style={styles.ticketCount}>10 ingresso</Text>
               <Text style={styles.dotSeparator}></Text>
-              <Text style={styles.eventDate}>Domingo 2 21:00hs</Text>
+              <Text style={styles.eventDate}></Text>
             </View>
 
             <Text style={styles.eventTitle} numberOfLines={2}>
-              Djavan - Rio de Janeiro
+             Rock in Rio 2026
             </Text>
 
             <Text style={styles.eventLocation} numberOfLines={1}>
-              Farmasi Arena
+              Rio de Janeiro
             </Text>
           </View>
         </TouchableOpacity>
