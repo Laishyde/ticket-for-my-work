@@ -183,113 +183,116 @@ export default function TicketsScreen() {
         </View>
       </View>
 
-      {/* Scroll de Ingressos: arraste para o lado para trocar de dia. Sem
-          barra de números — o próprio card é o indicador de navegação. */}
-      <ScrollView
-        ref={ticketScrollRef}
-        horizontal
-        pagingEnabled
-        showsHorizontalScrollIndicator={false}
-        onScroll={handleScroll}
-        scrollEventThrottle={16}
-        style={styles.ticketsHorizontalScroll}
-      >
-        {tickets.map((ticket, index) => (
-          <View key={ticket.id} style={styles.ticketPageWrapper}>
-            <View style={styles.ticketCardWrapper}>
+      {/* Área flexível dos ingressos */}
+      <View style={styles.ticketsArea}>
+        {/* Scroll de Ingressos: arraste para o lado para trocar de dia. Sem
+            barra de números — o próprio card é o indicador de navegação. */}
+        <ScrollView
+          ref={ticketScrollRef}
+          horizontal
+          pagingEnabled
+          showsHorizontalScrollIndicator={false}
+          onScroll={handleScroll}
+          scrollEventThrottle={16}
+          style={styles.ticketsHorizontalScroll}
+        >
+          {tickets.map((ticket, index) => (
+            <View key={ticket.id} style={styles.ticketPageWrapper}>
+              <View style={styles.ticketCardWrapper}>
 
-              {/* Imagem do ingresso, na proporção exata do arquivo — sem cortar, sem esticar */}
-              <View style={[styles.ticketImageContainer, { aspectRatio: ticket.aspectRatio }]}>
-                <Image
-                  source={ticket.image}
-                  style={styles.ticketCoverImage}
-                  resizeMode="cover"
-                />
-                <View style={styles.overlayBarContainer}>
-                  <View
-                    style={[
-                      styles.progressBar,
-                      { width: selectedTicket === index ? "35%" : "100%" },
-                    ]}
+                {/* Imagem do ingresso, na proporção exata do arquivo — sem cortar, sem esticar */}
+                <View style={[styles.ticketImageContainer, { aspectRatio: ticket.aspectRatio }]}>
+                  <Image
+                    source={ticket.image}
+                    style={styles.ticketCoverImage}
+                    resizeMode="cover"
                   />
-                </View>
-              </View>
-
-              {/* Parte Central Branca */}
-              <View style={styles.whiteSection}>
-                <View style={styles.qrRow}>
-                  <View style={styles.qrImageContainer}>
-                    <Image
-                      source={{
-                        uri: `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${ticket.qr}`,
-                      }}
-                      style={styles.qrImage}
+                  <View style={styles.overlayBarContainer}>
+                    <View
+                      style={[
+                        styles.progressBar,
+                        { width: selectedTicket === index ? "35%" : "100%" },
+                      ]}
                     />
                   </View>
+                </View>
 
-                  <View style={styles.qrRightInfo}>
-                    <View>
-                      <Text style={styles.cardInfoLabel}>Setor</Text>
-                      <Text style={styles.cardInfoValue} numberOfLines={1}>
-                        {ticket.setor}
-                      </Text>
+                {/* Parte Central Branca */}
+                <View style={styles.whiteSection}>
+                  <View style={styles.qrRow}>
+                    <View style={styles.qrImageContainer}>
+                      <Image
+                        source={{
+                          uri: `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${ticket.qr}`,
+                        }}
+                        style={styles.qrImage}
+                      />
                     </View>
 
-                    <View style={{ marginTop: 8 }}>
-                      <Text style={styles.cardInfoLabel}>Acesso</Text>
-                      <Text style={styles.cardInfoValue} numberOfLines={1}>
-                        {ticket.entrada}
-                      </Text>
-                    </View>
+                    <View style={styles.qrRightInfo}>
+                      <View>
+                        <Text style={styles.cardInfoLabel}>Setor</Text>
+                        <Text style={styles.cardInfoValue} numberOfLines={1}>
+                          {ticket.setor}
+                        </Text>
+                      </View>
 
-                    <TouchableOpacity style={styles.moreInfoButton} activeOpacity={0.7}>
-                      <Text style={styles.moreInfoButtonText}>Mais informação</Text>
-                    </TouchableOpacity>
+                      <View style={{ marginTop: 8 }}>
+                        <Text style={styles.cardInfoLabel}>Acesso</Text>
+                        <Text style={styles.cardInfoValue} numberOfLines={1}>
+                          {ticket.entrada}
+                        </Text>
+                      </View>
+
+                      <TouchableOpacity style={styles.moreInfoButton} activeOpacity={0.7}>
+                        <Text style={styles.moreInfoButtonText}>Mais informação</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                </View>
+
+                {/* Divisória Serrilhada */}
+                <View style={styles.dashedContainer}>
+                  <View style={styles.dashedLine} />
+                </View>
+
+                {/* Parte Inferior Cinza */}
+                <View style={styles.graySection}>
+                  <View style={styles.gridContainer}>
+                    <View style={styles.gridItem}>
+                      <Text style={styles.gridLabel}>Taxa</Text>
+                      <Text style={styles.gridValue}>{ticket.valorTipo}</Text>
+                    </View>
+                    <View style={styles.gridItem} />
+                    <View style={styles.gridItem}>
+                      <Text style={styles.gridLabel}>Seção</Text>
+                      <Text style={styles.gridValueBold}>{ticket.secao}</Text>
+                    </View>
+                    <View style={styles.gridItem}>
+                      <Text style={styles.gridLabel}>Fileira</Text>
+                      <Text style={styles.gridValue}>Não numerado</Text>
+                    </View>
+                    <View style={styles.gridItem}>
+                      <Text style={styles.gridLabel}>Abertura</Text>
+                      <Text style={styles.gridValue}>{ticket.abertura}</Text>
+                    </View>
+                    <View style={styles.gridItem}>
+                      <Text style={styles.gridLabel}>Início</Text>
+                      <Text style={styles.gridValue}>{ticket.inicio}</Text>
+                    </View>
                   </View>
                 </View>
               </View>
 
-              {/* Divisória Serrilhada */}
-              <View style={styles.dashedContainer}>
-                <View style={styles.dashedLine} />
-              </View>
-
-              {/* Parte Inferior Cinza */}
-              <View style={styles.graySection}>
-                <View style={styles.gridContainer}>
-                  <View style={styles.gridItem}>
-                    <Text style={styles.gridLabel}>Taxa</Text>
-                    <Text style={styles.gridValue}>{ticket.valorTipo}</Text>
-                  </View>
-                  <View style={styles.gridItem} />
-                  <View style={styles.gridItem}>
-                    <Text style={styles.gridLabel}>Seção</Text>
-                    <Text style={styles.gridValueBold}>{ticket.secao}</Text>
-                  </View>
-                  <View style={styles.gridItem}>
-                    <Text style={styles.gridLabel}>Fileira</Text>
-                    <Text style={styles.gridValue}>Não numerado</Text>
-                  </View>
-                  <View style={styles.gridItem}>
-                    <Text style={styles.gridLabel}>Abertura</Text>
-                    <Text style={styles.gridValue}>{ticket.abertura}</Text>
-                  </View>
-                  <View style={styles.gridItem}>
-                    <Text style={styles.gridLabel}>Início</Text>
-                    <Text style={styles.gridValue}>{ticket.inicio}</Text>
-                  </View>
-                </View>
-              </View>
+              {/* Ação de Devolver Ingresso */}
+              <TouchableOpacity style={styles.returnButton} activeOpacity={0.7}>
+                <Ionicons name="arrow-undo" size={16} color="#0084ff" style={styles.returnIcon} />
+                <Text style={styles.returnText}>Devolver ingresso</Text>
+              </TouchableOpacity>
             </View>
-
-            {/* Ação de Devolver Ingresso */}
-            <TouchableOpacity style={styles.returnButton} activeOpacity={0.7}>
-              <Ionicons name="arrow-undo" size={16} color="#0084ff" style={styles.returnIcon} />
-              <Text style={styles.returnText}>Devolver ingresso</Text>
-            </TouchableOpacity>
-          </View>
-        ))}
-      </ScrollView>
+          ))}
+        </ScrollView>
+      </View>
 
       {/* Rodapé Fixo */}
       <View style={styles.customFooter}>
@@ -336,8 +339,12 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: 2,
   },
-ticketsHorizontalScroll: {
+ticketsArea: {
   flex: 1,
+  justifyContent: "flex-start",
+},
+ticketsHorizontalScroll: {
+  flexGrow: 0,
 },
   ticketPageWrapper: {
     width: SCREEN_WIDTH,
