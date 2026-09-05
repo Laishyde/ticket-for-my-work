@@ -203,7 +203,7 @@ export default function TicketsScreen() {
                 <Image
                   source={ticket.image}
                   style={styles.ticketCoverImage}
-                  resizeMode="contain"
+                  resizeMode="cover"
                 />
                 <View style={styles.overlayBarContainer}>
                   <View
@@ -284,7 +284,7 @@ export default function TicketsScreen() {
 
             {/* Ação de Devolver Ingresso */}
             <TouchableOpacity style={styles.returnButton} activeOpacity={0.7}>
-              <Ionicons name="arrow-undo" size={16} color="#ffffff" style={styles.returnIcon} />
+              <Ionicons name="arrow-undo" size={16} color="#0084ff" style={styles.returnIcon} />
               <Text style={styles.returnText}>Devolver ingresso</Text>
             </TouchableOpacity>
           </View>
@@ -343,7 +343,7 @@ const styles = StyleSheet.create({
     width: SCREEN_WIDTH,
     flex: 1,
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "flex-start",
     paddingHorizontal: 8,
   },
   ticketCardWrapper: {
