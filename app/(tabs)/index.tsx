@@ -137,7 +137,7 @@ export default function HomeScreen() {
 
           <View style={styles.eventInfo}>
             <View style={styles.ticketMeta}>
-              <Text style={styles.ticketCount}>10 ingresso</Text>
+              <Text style={styles.ticketCount}>2 ingressos</Text>
               <Text style={styles.dotSeparator}></Text>
               <Text style={styles.eventDate}></Text>
             </View>

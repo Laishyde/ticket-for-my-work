@@ -443,7 +443,7 @@ const styles = StyleSheet.create({
 
   ticketImageContainer: {
     width: "100%",
-    backgroundColor: "#06131d",
+    backgroundColor: "#0074d1",
     position: "relative",
     overflow: "hidden",
   },
