@@ -50,7 +50,7 @@ const getImageAspectRatio = (image: any, fallback = 3 / 2) => {
 };
 
 const getBTSDate = (dayOffset: number) => {
-  const baseDate = new Date(2026, 9, 15);
+  const baseDate = new Date(2026, 9, 30);
   const targetDate = new Date(baseDate);
   targetDate.setDate(baseDate.getDate() + dayOffset);
 
