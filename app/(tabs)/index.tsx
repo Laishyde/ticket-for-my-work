@@ -126,7 +126,7 @@ export default function HomeScreen() {
         >
           <View style={styles.eventImageContainer}>
             <ExpoImage
-              source={require("../../assets/images/logo.jpg")}
+              source={require("../../assets/images/bts.png")}
               style={styles.eventImage}
               contentFit="cover"
             />
@@ -143,11 +143,11 @@ export default function HomeScreen() {
             </View>
 
             <Text style={styles.eventTitle} numberOfLines={2}>
-             Rock in Rio 2026
+             BTS WORLD TOUR 'ARIRANG'
             </Text>
 
             <Text style={styles.eventLocation} numberOfLines={1}>
-              Rio de Janeiro
+              São Paulo, no Estádio do MorumBIS
             </Text>
           </View>
         </TouchableOpacity>
