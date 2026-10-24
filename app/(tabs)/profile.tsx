@@ -9,15 +9,41 @@ import {
     StyleSheet,
     Text,
     TouchableOpacity,
-    View,
+    View
 } from "react-native";
 
 export default function ProfileScreen() {
   console.log("PROFILE RENDER");
   const router = useRouter();
+  const { user, signOut } = useAuth();
   const [selectedTab, setSelectedTab] = useState<
     "tickets" | "favorites" | "history"
   >("tickets");
+
+  const handleLogout = () => {
+    Alert.alert(
+      "Sair",
+      "Tem certeza que deseja sair da sua conta?",
+      [
+        {
+          text: "Cancelar",
+          style: "cancel",
+        },
+        {
+          text: "Sair",
+          style: "destructive",
+          onPress: async () => {
+            try {
+              await signOut();
+              router.replace("/login");
+            } catch (error: any) {
+              Alert.alert("Erro", error.message || "Erro ao fazer logout");
+            }
+          },
+        },
+      ]
+    );
+  };
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -57,8 +83,8 @@ export default function ProfileScreen() {
             style={styles.avatar}
             contentFit="cover"
           />
-          <Text style={styles.userName}>{mockUser.name}</Text>
-          <Text style={styles.userEmail}>{mockUser.email}</Text>
+          <Text style={styles.userName}>{user?.email?.split('@')[0] || 'Usuário'}</Text>
+          <Text style={styles.userEmail}>{user?.email || ''}</Text>
 
           <View style={styles.statsContainer}>
             <View style={styles.statItem}>
@@ -280,6 +306,7 @@ export default function ProfileScreen() {
 
           <TouchableOpacity
             style={[styles.settingItem, styles.settingItemDanger]}
+            onPress={handleLogout}
           >
             <IconSymbol name="arrow.right.square" size={24} color="#F44336" />
             <Text style={[styles.settingText, styles.settingTextDanger]}>
