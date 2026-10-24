@@ -1,111 +1,128 @@
+import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import {
-  View,
+  ActivityIndicator,
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  StyleSheet,
-  KeyboardAvoidingView,
-  Platform,
-  Alert,
-  ActivityIndicator,
+  View
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../contexts/AuthContext';
-import { useRouter } from 'expo-router';
 
 export default function LoginScreen() {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
   const { signIn, signUp } = useAuth();
   const router = useRouter();
 
   const handleAuth = async () => {
-    if (!email || !password) {
-      Alert.alert('Erro', 'Por favor, preencha todos os campos');
+    if (!email.trim() || !password) {
+      setFeedback({ type: 'error', message: 'Preencha seu e-mail e sua senha para continuar.' });
       return;
     }
 
+    setFeedback(null);
     setLoading(true);
     try {
       if (isLogin) {
-        await signIn(email, password);
-        Alert.alert('Sucesso', 'Login realizado com sucesso!');
-        router.replace('/(tabs)');
+        await signIn(email.trim(), password);
+        router.replace('/');
       } else {
-        await signUp(email, password);
-        Alert.alert('Sucesso', 'Conta criada com sucesso! Faça login para continuar.');
+        await signUp(email.trim(), password);
         setIsLogin(true);
+        setPassword('');
+        setFeedback({
+          type: 'success',
+          message: 'Conta criada! Agora entre com seu e-mail e senha. Se for solicitada, confirme seu e-mail antes de entrar.',
+        });
       }
     } catch (error: any) {
-      Alert.alert('Erro', error.message || 'Ocorreu um erro na autenticação');
+      setFeedback({
+        type: 'error',
+        message: error.message || 'Não foi possível concluir. Confira os dados e tente novamente.',
+      });
     } finally {
       setLoading(false);
     }
   };
 
-  return (
+return (
     <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       <View style={styles.content}>
-        {/* Logo/Icon */}
         <View style={styles.logoContainer}>
-          <Ionicons name="ticket-outline" size={80} color="#0074d1" />
+          <View style={styles.logoMark}>
+            <Image source={require('../assets/images/icon.png')} style={styles.logoImage} />
+          </View>
+          <Text style={styles.brand}>QUENTRO</Text>
         </View>
 
-        <Text style={styles.title}>Bem-vindo ao Quentro</Text>
-        <Text style={styles.subtitle}>
-          {isLogin ? 'Faça login para acessar seus ingressos' : 'Crie sua conta para começar'}
-        </Text>
+        <View style={styles.card}>
+          <Text style={styles.title}>{isLogin ? 'Que bom ver você' : 'Crie sua conta'}</Text>
+          <Text style={styles.subtitle}>
+            {isLogin ? 'Entre para acessar seus ingressos.' : 'Cadastre-se para acompanhar seus eventos.'}
+          </Text>
 
-        {/* Tabs */}
-        <View style={styles.tabContainer}>
-          <TouchableOpacity
-            style={[styles.tab, isLogin && styles.tabActive]}
-            onPress={() => setIsLogin(true)}
-            activeOpacity={0.7}
-          >
-            <Text style={[styles.tabText, isLogin && styles.tabTextActive]}>Login</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.tab, !isLogin && styles.tabActive]}
-            onPress={() => setIsLogin(false)}
-            activeOpacity={0.7}
-          >
-            <Text style={[styles.tabText, !isLogin && styles.tabTextActive]}>Cadastro</Text>
-          </TouchableOpacity>
-        </View>
+          <View style={styles.form}>
+            <Text style={styles.fieldLabel}>E-mail</Text>
+            <View style={styles.inputContainer}>
+              <Ionicons name="mail-outline" size={19} color="#00f0ff" style={styles.inputIcon} />
+              <TextInput
+                style={styles.input}
+                placeholder="voce@exemplo.com"
+                placeholderTextColor="#7b8492"
+                value={email}
+                onChangeText={(value) => {
+                  setEmail(value);
+                  setFeedback(null);
+                }}
+                autoCapitalize="none"
+                autoComplete="email"
+                keyboardType="email-address"
+              />
+            </View>
 
-        {/* Form */}
-        <View style={styles.form}>
-          <View style={styles.inputContainer}>
-            <Ionicons name="mail-outline" size={20} color="#8e8e93" style={styles.inputIcon} />
-            <TextInput
-              style={styles.input}
-              placeholder="E-mail"
-              placeholderTextColor="#8e8e93"
-              value={email}
-              onChangeText={setEmail}
-              autoCapitalize="none"
-              keyboardType="email-address"
-            />
+            <Text style={styles.fieldLabel}>Senha</Text>
+            <View style={styles.inputContainer}>
+              <Ionicons name="lock-closed-outline" size={19} color="#00f0ff" style={styles.inputIcon} />
+              <TextInput
+                style={styles.input}
+                placeholder="Digite sua senha"
+                placeholderTextColor="#7b8492"
+                value={password}
+                onChangeText={(value) => {
+                  setPassword(value);
+                  setFeedback(null);
+                }}
+                secureTextEntry
+                autoComplete={isLogin ? 'current-password' : 'new-password'}
+                onSubmitEditing={handleAuth}
+              />
+            </View>
           </View>
 
-          <View style={styles.inputContainer}>
-            <Ionicons name="lock-closed-outline" size={20} color="#8e8e93" style={styles.inputIcon} />
-            <TextInput
-              style={styles.input}
-              placeholder="Senha"
-              placeholderTextColor="#8e8e93"
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry
-            />
-          </View>
+          {feedback && (
+            <View style={[styles.feedback, feedback.type === 'success' ? styles.feedbackSuccess : styles.feedbackError]}>
+              <Ionicons
+                name={feedback.type === 'success' ? 'checkmark-circle' : 'alert-circle'}
+                size={20}
+                color={feedback.type === 'success' ? '#86efac' : '#fca5a5'}
+              />
+              <Text style={[styles.feedbackText, feedback.type === 'success' ? styles.feedbackSuccessText : styles.feedbackErrorText]}>
+                {feedback.message}
+              </Text>
+            </View>
+          )}
 
           <TouchableOpacity
             style={styles.button}
@@ -114,25 +131,30 @@ export default function LoginScreen() {
             activeOpacity={0.8}
           >
             {loading ? (
-              <ActivityIndicator color="#ffffff" />
+              <ActivityIndicator color="#070d0f" />
             ) : (
               <Text style={styles.buttonText}>
-                {isLogin ? 'Entrar' : 'Criar Conta'}
+                {isLogin ? 'Entrar na minha conta' : 'Criar minha conta'}
               </Text>
             )}
           </TouchableOpacity>
-        </View>
 
-        {/* Info */}
-        <View style={styles.infoContainer}>
-          <Text style={styles.infoText}>
-            {isLogin ? 'Não tem uma conta? ' : 'Já tem uma conta? '}
-          </Text>
-          <TouchableOpacity onPress={() => setIsLogin(!isLogin)} activeOpacity={0.7}>
-            <Text style={styles.infoLink}>
-              {isLogin ? 'Cadastre-se' : 'Faça login'}
+          <View style={styles.infoContainer}>
+            <Text style={styles.infoText}>
+              {isLogin ? 'Ainda não tem uma conta? ' : 'Já tem uma conta? '}
             </Text>
-          </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setIsLogin(!isLogin);
+                setFeedback(null);
+              }}
+              activeOpacity={0.7}
+            >
+              <Text style={styles.infoLink}>
+                {isLogin ? 'Cadastre-se' : 'Entrar'}
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </KeyboardAvoidingView>
@@ -142,65 +164,93 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000000',
+    backgroundColor: '#0a1012',
   },
   content: {
     flex: 1,
-    paddingHorizontal: 24,
+    width: '100%',
+    maxWidth: 480,
+    alignSelf: 'center',
+    paddingHorizontal: 20,
     justifyContent: 'center',
+    paddingVertical: 28,
   },
   logoContainer: {
     alignItems: 'center',
-    marginBottom: 24,
+    marginBottom: 22,
+  },
+  logoMark: {
+    width: 60,
+    height: 60,
+    borderRadius: 16,
+    backgroundColor: '#131b1d',
+    borderWidth: 1,
+    borderColor: 'rgba(0, 240, 255, 0.3)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 10,
+    shadowColor: '#00f0ff',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  logoImage: {
+    width: 32,
+    height: 32,
+    resizeMode: 'contain',
+  },
+  brand: {
+    fontSize: 12,
+    fontWeight: '800',
+    color: '#00f0ff',
+    letterSpacing: 2,
+  },
+  card: {
+    backgroundColor: '#131b1d',
+    borderColor: 'rgba(0, 240, 255, 0.25)',
+    borderWidth: 1,
+    borderRadius: 18,
+    padding: 24,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.5,
+    shadowRadius: 15,
+    elevation: 8,
   },
   title: {
-    fontSize: 28,
-    fontWeight: '800',
+    fontSize: 25,
+    fontWeight: '700',
     color: '#ffffff',
     textAlign: 'center',
-    marginBottom: 8,
+    marginBottom: 7,
   },
   subtitle: {
     fontSize: 14,
-    color: '#8e8e93',
+    color: '#94a3b8',
     textAlign: 'center',
-    marginBottom: 32,
-  },
-  tabContainer: {
-    flexDirection: 'row',
-    backgroundColor: '#1c1c1e',
-    borderRadius: 12,
-    padding: 4,
+    lineHeight: 21,
     marginBottom: 24,
-  },
-  tab: {
-    flex: 1,
-    paddingVertical: 12,
-    borderRadius: 10,
-    alignItems: 'center',
-  },
-  tabActive: {
-    backgroundColor: '#0074d1',
-  },
-  tabText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#8e8e93',
-  },
-  tabTextActive: {
-    color: '#ffffff',
   },
   form: {
-    marginBottom: 24,
+    marginBottom: 16,
+  },
+  fieldLabel: {
+    color: '#cbd5e1',
+    fontSize: 13,
+    fontWeight: '600',
+    marginBottom: 8,
   },
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1c1c1e',
-    borderRadius: 12,
+    backgroundColor: '#0c1315',
+    borderColor: '#1e293b',
+    borderWidth: 1,
+    borderRadius: 9,
     paddingHorizontal: 16,
-    paddingVertical: 12,
-    marginBottom: 12,
+    height: 52,
+    marginBottom: 17,
   },
   inputIcon: {
     marginRight: 12,
@@ -209,31 +259,66 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
     color: '#ffffff',
+    outlineStyle: 'none',
+  } as any,
+  feedback: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    borderRadius: 9,
+    borderWidth: 1,
+    padding: 12,
+    marginBottom: 14,
+    gap: 9,
+  },
+  feedbackSuccess: {
+    backgroundColor: '#0c2226',
+    borderColor: '#115e59',
+  },
+  feedbackError: {
+    backgroundColor: '#2b1719',
+    borderColor: '#65343a',
+  },
+  feedbackText: {
+    flex: 1,
+    fontSize: 13,
+    lineHeight: 19,
+  },
+  feedbackSuccessText: {
+    color: '#99f6e4',
+  },
+  feedbackErrorText: {
+    color: '#fecaca',
   },
   button: {
-    backgroundColor: '#0074d1',
-    borderRadius: 12,
-    paddingVertical: 16,
+    backgroundColor: '#00f0ff',
+    borderRadius: 9,
+    minHeight: 52,
     alignItems: 'center',
-    marginTop: 8,
+    justifyContent: 'center',
+    shadowColor: '#00f0ff',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 4,
   },
   buttonText: {
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: '700',
-    color: '#ffffff',
+    color: '#070d0f',
   },
   infoContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+    marginTop: 20,
   },
   infoText: {
     fontSize: 14,
-    color: '#8e8e93',
+    color: '#94a3b8',
   },
   infoLink: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#0074d1',
+    color: '#00f0ff',
   },
 });

@@ -1,15 +1,17 @@
+import { useAuth } from "@/contexts/AuthContext";
 import { Ionicons } from "@expo/vector-icons";
 import { Image as ExpoImage } from "expo-image";
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
-    ScrollView,
-    StatusBar,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
+import LoginScreen from "../login";
 
 // Função com a sua lógica idêntica e intacta, apenas corrigindo a string de exibição
 const getDynamicShowDate = () => {
@@ -44,7 +46,7 @@ const getDynamicShowDate = () => {
   return `${dayOfWeek}, ${showDay} • 20:45h`;
 };
 
-export default function HomeScreen() {
+export function TicketsHomeScreen() {
   const router = useRouter();
   const [, setCurrentTime] = useState("");
   const [activeTab, setActiveTab] = useState<"proximos" | "anterior">("proximos");
@@ -151,8 +153,21 @@ export default function HomeScreen() {
             </Text>
           </View>
         </TouchableOpacity>
+
       </ScrollView>
     </View>
+  );
+}
+
+export default function HomeScreen() {
+  const { user, loading } = useAuth();
+
+  if (loading || !user) {
+    return <LoginScreen />;
+  }
+
+  return (
+    <TicketsHomeScreen />
   );
 }
 

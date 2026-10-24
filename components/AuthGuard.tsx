@@ -1,17 +1,25 @@
-import React, { useEffect } from 'react';
-import { View, ActivityIndicator } from 'react-native';
+import { useRouter, useSegments } from 'expo-router';
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, View } from 'react-native';
 import { useAuth } from '../contexts/AuthContext';
-import { useRouter } from 'expo-router';
 
 export function AuthGuard({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
   const router = useRouter();
+  const segments = useSegments();
+  const [isNavigating, setIsNavigating] = useState(false);
 
   useEffect(() => {
-    if (!loading && !user) {
+    if (loading) return;
+
+    const inAuthGroup = segments[0] === '(tabs)';
+
+    if (!user && inAuthGroup && !isNavigating) {
+      setIsNavigating(true);
       router.replace('/login');
+      setTimeout(() => setIsNavigating(false), 500);
     }
-  }, [user, loading, router]);
+  }, [user, loading, segments, router, isNavigating]);
 
   if (loading) {
     return (

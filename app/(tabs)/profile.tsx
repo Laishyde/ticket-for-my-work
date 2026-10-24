@@ -4,13 +4,16 @@ import { Image as ExpoImage } from "expo-image";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
+    Alert,
     ScrollView,
     StatusBar,
     StyleSheet,
     Text,
     TouchableOpacity,
-    View
+    View,
 } from "react-native";
+import { RequireAuth } from "../../components/RequireAuth";
+import { useAuth } from "../../contexts/AuthContext";
 
 export default function ProfileScreen() {
   console.log("PROFILE RENDER");
@@ -63,8 +66,9 @@ export default function ProfileScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor="#fff" />
+    <RequireAuth>
+      <View style={styles.container}>
+        <StatusBar barStyle="dark-content" backgroundColor="#fff" />
 
       {/* Header */}
       <View style={styles.header}>
@@ -318,6 +322,7 @@ export default function ProfileScreen() {
         <View style={{ height: 100 }} />
       </ScrollView>
     </View>
+    </RequireAuth>
   );
 }
 

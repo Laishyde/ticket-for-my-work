@@ -3,22 +3,20 @@ import React from "react";
 
 import { HapticTab } from "@/components/haptic-tab";
 import { IconSymbol } from "@/components/ui/icon-symbol";
-import { AuthGuard } from "../components/AuthGuard";
 
 export default function TabLayout() {
   return (
-    <AuthGuard>
-      <Tabs
-        screenOptions={{
-          headerShown: false,
-          tabBarButton: HapticTab,
-          tabBarStyle: {
-            display: "none", // Oculta completamente a barra de navegação inferior
-          },
-          tabBarActiveTintColor: "#EAB308",
-          tabBarInactiveTintColor: "#888",
-        }}
-      >
+    <Tabs
+      screenOptions={{
+        headerShown: false,
+        tabBarButton: HapticTab,
+        tabBarStyle: {
+          display: "none", // Oculta completamente a barra de navegação inferior
+        },
+        tabBarActiveTintColor: "#EAB308",
+        tabBarInactiveTintColor: "#888",
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
@@ -56,6 +54,5 @@ export default function TabLayout() {
         }}
       />
     </Tabs>
-    </AuthGuard>
   );
 }

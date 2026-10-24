@@ -1,20 +1,21 @@
+import { RequireAuth } from "@/components/RequireAuth";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React, { useEffect, useRef, useState } from "react";
 import {
-  Animated,
-  Dimensions,
-  Easing,
-  Image,
-  NativeScrollEvent,
-  NativeSyntheticEvent,
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
+    Animated,
+    Dimensions,
+    Easing,
+    Image,
+    NativeScrollEvent,
+    NativeSyntheticEvent,
+    SafeAreaView,
+    ScrollView,
+    StatusBar,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
 } from "react-native";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
@@ -38,6 +39,41 @@ interface Ticket {
   inicio: string;
   image: any;
 }
+
+const eventInfo = {
+  sessions: ["28/10/2026", "30/10/2026", "31/10/2026"],
+  doorsOpen: "16:00",
+  showStarts: "20:00",
+  ageRating: "16 anos; de 5 a 15 anos somente acompanhados de pais ou responsáveis legais",
+  onlineServiceFee: "20% sobre o valor do ingresso",
+  prices: [
+    {
+      sector: "Arquibancada",
+      half: "R$ 340,00 + R$ 68,00 taxa = R$ 408,00",
+      full: "R$ 680,00 + R$ 136,00 taxa = R$ 816,00",
+    },
+    {
+      sector: "Cadeira Superior",
+      half: "R$ 490,00 + R$ 98,00 taxa = R$ 588,00",
+      full: "R$ 980,00 + R$ 196,00 taxa = R$ 1.176,00",
+    },
+    {
+      sector: "Cadeira Inferior",
+      half: "R$ 540,00 + R$ 108,00 taxa = R$ 648,00",
+      full: "R$ 1.080,00 + R$ 216,00 taxa = R$ 1.296,00",
+    },
+    {
+      sector: "Pista",
+      half: "R$ 625,00 + R$ 125,00 taxa = R$ 750,00",
+      full: "R$ 1.250,00 + R$ 250,00 taxa = R$ 1.500,00",
+    },
+    {
+      sector: "Soundcheck Pacote VIP (pista, soundcheck pré-show e brindes)",
+      half: "R$ 3.678,00 + R$ 125,00 taxa = R$ 3.803,00",
+      full: "R$ 4.303,00 + R$ 250,00 taxa = R$ 4.553,00",
+    },
+  ],
+};
 
 const getImageAspectRatio = (image: any, fallback = 3 / 2) => {
   try {
@@ -77,6 +113,24 @@ const getBTSDate = (dayOffset: number) => {
 
 const rawTickets = [
   {
+    id: 3,
+    tab: "3",
+    evento: "BTS WORLD TOUR 'ARIRANG'",
+    ...getBTSDate(-2),
+    local: "São Paulo, no Estádio do MorumBIS",
+    setor: "Arquibancada: B",
+    secao: "INTEIRA",
+    entrada: "Últ. Acesso: 00h",
+    valor: "R$ 680,00",
+    total: "R$ 816,00",
+    qr: "BTS2026-SP-ARQUIBANCADA-B-3",
+    valorTipo: "Benefício Itaú 15%",
+    abertura: "16:00",
+    inicio: "20:00",
+    image: require("../../assets/images/ticket.png"),
+    eventInfo,
+  },
+  {
     id: 1,
     tab: "1",
     evento: "BTS WORLD TOUR 'ARIRANG'",
@@ -86,12 +140,13 @@ const rawTickets = [
     secao: "INTEIRA",
     entrada: "Últ. Acesso: 00h",
     valor: "R$ 680,00",
-    total: "R$ 680,00",
+    total: "R$ 816,00",
     qr: "BTS2026-SP-ARQUIBANCADA-B-1",
     valorTipo: "Benefício Itaú 15%",
-    abertura: "18:00",
+    abertura: "16:00",
     inicio: "20:00",
     image: require("../../assets/images/ticket.png"),
+    eventInfo,
   },
   {
     id: 2,
@@ -103,12 +158,13 @@ const rawTickets = [
     secao: "INTEIRA",
     entrada: "Últ. Acesso: 00h",
     valor: "R$ 680,00",
-    total: "R$ 680,00",
+    total: "R$ 816,00",
     qr: "BTS2026-SP-ARQUIBANCADA-B-2",
     valorTipo: "Benefício Itaú 15%",
-    abertura: "18:00",
+    abertura: "16:00",
     inicio: "20:00",
     image: require("../../assets/images/ticket.png"),
+    eventInfo,
   },
 ];
 
@@ -167,8 +223,9 @@ export default function TicketsScreen() {
   const goPrev = () => scrollToTicket(selectedTicket - 1);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#000000" />
+    <RequireAuth>
+      <SafeAreaView style={styles.container}>
+        <StatusBar barStyle="light-content" backgroundColor="#000000" />
 
       {/* Cabeçalho do Evento */}
       <View style={styles.header}>
@@ -338,6 +395,7 @@ export default function TicketsScreen() {
         </TouchableOpacity>
       </View>
     </SafeAreaView>
+    </RequireAuth>
   );
 }
 
