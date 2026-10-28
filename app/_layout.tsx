@@ -11,7 +11,6 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "react-native-reanimated";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
-import { AuthProvider } from "@/contexts/AuthContext";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 
 SplashScreen.preventAutoHideAsync();
@@ -34,14 +33,12 @@ export default function RootLayout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>
-        <AuthProvider>
-          <ThemeProvider
-            value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
-          >
-            <Stack screenOptions={{ headerShown: false }} />
-            <StatusBar style="auto" />
-          </ThemeProvider>
-        </AuthProvider>
+        <ThemeProvider
+          value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
+        >
+          <Stack screenOptions={{ headerShown: false }} />
+          <StatusBar style="auto" />
+        </ThemeProvider>
       </SafeAreaProvider>
     </GestureHandlerRootView>
   );

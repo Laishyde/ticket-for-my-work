@@ -1,17 +1,15 @@
-import { useAuth } from "@/contexts/AuthContext";
 import { Ionicons } from "@expo/vector-icons";
 import { Image as ExpoImage } from "expo-image";
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
+    ScrollView,
+    StatusBar,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
 } from "react-native";
-import LoginScreen from "../login";
 
 // Função com a sua lógica idêntica e intacta, apenas corrigindo a string de exibição
 const getDynamicShowDate = () => {
@@ -160,12 +158,6 @@ export function TicketsHomeScreen() {
 }
 
 export default function HomeScreen() {
-  const { user, loading } = useAuth();
-
-  if (loading || !user) {
-    return <LoginScreen />;
-  }
-
   return (
     <TicketsHomeScreen />
   );

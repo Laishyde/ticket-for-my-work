@@ -1,21 +1,20 @@
-import { RequireAuth } from "@/components/RequireAuth";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React, { useEffect, useRef, useState } from "react";
 import {
-    Animated,
-    Dimensions,
-    Easing,
-    Image,
-    NativeScrollEvent,
-    NativeSyntheticEvent,
-    SafeAreaView,
-    ScrollView,
-    StatusBar,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  Animated,
+  Dimensions,
+  Easing,
+  Image,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  SafeAreaView,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
@@ -49,28 +48,28 @@ const eventInfo = {
   prices: [
     {
       sector: "Arquibancada",
-      half: "R$ 340,00 + R$ 68,00 taxa = R$ 408,00",
-      full: "R$ 680,00 + R$ 136,00 taxa = R$ 816,00",
+      half: "R$ 340,00",
+      full: "R$ 680,00",
     },
     {
       sector: "Cadeira Superior",
-      half: "R$ 490,00 + R$ 98,00 taxa = R$ 588,00",
-      full: "R$ 980,00 + R$ 196,00 taxa = R$ 1.176,00",
+      half: "R$ 490,00",
+      full: "R$ 980,00",
     },
     {
       sector: "Cadeira Inferior",
-      half: "R$ 540,00 + R$ 108,00 taxa = R$ 648,00",
-      full: "R$ 1.080,00 + R$ 216,00 taxa = R$ 1.296,00",
+      half: "R$ 540,00",
+      full: "R$ 1.080,00",
     },
     {
       sector: "Pista",
-      half: "R$ 625,00 + R$ 125,00 taxa = R$ 750,00",
-      full: "R$ 1.250,00 + R$ 250,00 taxa = R$ 1.500,00",
+      half: "R$ 625,00",
+      full: "R$ 1.250,00",
     },
     {
       sector: "Soundcheck Pacote VIP (pista, soundcheck pré-show e brindes)",
-      half: "R$ 3.678,00 + R$ 125,00 taxa = R$ 3.803,00",
-      full: "R$ 4.303,00 + R$ 250,00 taxa = R$ 4.553,00",
+      half: "R$ 3.678,00",
+      full: "R$ 4.303,00",
     },
   ],
 };
@@ -113,35 +112,17 @@ const getBTSDate = (dayOffset: number) => {
 
 const rawTickets = [
   {
-    id: 3,
-    tab: "3",
-    evento: "BTS WORLD TOUR 'ARIRANG'",
-    ...getBTSDate(-2),
-    local: "São Paulo, no Estádio do MorumBIS",
-    setor: "Arquibancada: B",
-    secao: "INTEIRA",
-    entrada: "Últ. Acesso: 00h",
-    valor: "R$ 680,00",
-    total: "R$ 816,00",
-    qr: "BTS2026-SP-ARQUIBANCADA-B-3",
-    valorTipo: "Benefício Itaú 15%",
-    abertura: "16:00",
-    inicio: "20:00",
-    image: require("../../assets/images/ticket.png"),
-    eventInfo,
-  },
-  {
     id: 1,
     tab: "1",
     evento: "BTS WORLD TOUR 'ARIRANG'",
     ...getBTSDate(0),
     local: "São Paulo, no Estádio do MorumBIS",
-    setor: "Arquibancada: B",
+    setor: "Pista",
     secao: "INTEIRA",
-    entrada: "Últ. Acesso: 00h",
-    valor: "R$ 680,00",
-    total: "R$ 816,00",
-    qr: "BTS2026-SP-ARQUIBANCADA-B-1",
+    entrada: "Portões 02, 04 e 18",
+    valor: "R$ 1.250,00",
+    total: "R$ 1.500,00",
+    qr: "BTS2026-SP-PISTA-1",
     valorTipo: "Benefício Itaú 15%",
     abertura: "16:00",
     inicio: "20:00",
@@ -154,12 +135,48 @@ const rawTickets = [
     evento: "BTS WORLD TOUR 'ARIRANG'",
     ...getBTSDate(1),
     local: "São Paulo, no Estádio do MorumBIS",
-    setor: "Arquibancada: B",
+    setor: "Cadeira Inferior",
     secao: "INTEIRA",
-    entrada: "Últ. Acesso: 00h",
+    entrada: "Portões 17A e 17B",
+    valor: "R$ 1.080,00",
+    total: "R$ 1.296,00",
+    qr: "BTS2026-SP-CADEIRA-INFERIOR-2",
+    valorTipo: "Benefício Itaú 15%",
+    abertura: "16:00",
+    inicio: "20:00",
+    image: require("../../assets/images/ticket.png"),
+    eventInfo,
+  },
+  {
+    id: 3,
+    tab: "3",
+    evento: "BTS WORLD TOUR 'ARIRANG'",
+    ...getBTSDate(-2),
+    local: "São Paulo, no Estádio do MorumBIS",
+    setor: "Cadeira Superior",
+    secao: "INTEIRA",
+    entrada: "Portões 05 e 16",
+    valor: "R$ 980,00",
+    total: "R$ 1.176,00",
+    qr: "BTS2026-SP-CADEIRA-SUPERIOR-3",
+    valorTipo: "Benefício Itaú 15%",
+    abertura: "16:00",
+    inicio: "20:00",
+    image: require("../../assets/images/ticket.png"),
+    eventInfo,
+  },
+  {
+    id: 4,
+    tab: "4",
+    evento: "BTS WORLD TOUR 'ARIRANG'",
+    ...getBTSDate(0),
+    local: "São Paulo, no Estádio do MorumBIS",
+    setor: "Arquibancada",
+    secao: "INTEIRA",
+    entrada: "Portões 06 e 15",
     valor: "R$ 680,00",
     total: "R$ 816,00",
-    qr: "BTS2026-SP-ARQUIBANCADA-B-2",
+    qr: "BTS2026-SP-ARQUIBANCADA-4",
     valorTipo: "Benefício Itaú 15%",
     abertura: "16:00",
     inicio: "20:00",
@@ -223,9 +240,8 @@ export default function TicketsScreen() {
   const goPrev = () => scrollToTicket(selectedTicket - 1);
 
   return (
-    <RequireAuth>
-      <SafeAreaView style={styles.container}>
-        <StatusBar barStyle="light-content" backgroundColor="#000000" />
+    <SafeAreaView style={styles.container}>
+      <StatusBar barStyle="light-content" backgroundColor="#000000" />
 
       {/* Cabeçalho do Evento */}
       <View style={styles.header}>
@@ -395,7 +411,6 @@ export default function TicketsScreen() {
         </TouchableOpacity>
       </View>
     </SafeAreaView>
-    </RequireAuth>
   );
 }
 
