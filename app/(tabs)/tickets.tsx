@@ -85,13 +85,14 @@ const getImageAspectRatio = (image: any, fallback = 3 / 2) => {
 };
 
 const getBTSDate = (dayOffset: number) => {
-  const baseDate = new Date(2026, 9, 30);
-  const targetDate = new Date(baseDate);
-  targetDate.setDate(baseDate.getDate() + dayOffset);
+  const today = new Date();
+  const currentDay = today.getDate();
+  const currentMonth = today.getMonth();
+  const currentYear = today.getFullYear();
 
-  const currentDay = targetDate.getDate();
-  const currentMonth = targetDate.getMonth() + 1;
-  const currentYear = targetDate.getFullYear();
+  let showDay = currentDay + dayOffset;
+  let targetDate = new Date(currentYear, currentMonth, showDay);
+  let finalDate = targetDate;
 
   const daysOfWeek = [
     "Domingo",
@@ -102,11 +103,15 @@ const getBTSDate = (dayOffset: number) => {
     "Sexta-feira",
     "Sábado",
   ];
-  const dayOfWeek = daysOfWeek[targetDate.getDay()];
+  const dayOfWeek = daysOfWeek[finalDate.getDay()];
+
+  const displayDay = finalDate.getDate();
+  const displayMonth = finalDate.getMonth() + 1;
+  const displayYear = finalDate.getFullYear();
 
   return {
-    data: `${dayOfWeek} · ${currentDay.toString().padStart(2, "0")}/${currentMonth.toString().padStart(2, "0")}/${currentYear.toString().slice(-2)} · 20:00`,
-    headerData: `${currentDay.toString().padStart(2, "0")}/${currentMonth.toString().padStart(2, "0")}/${currentYear} - São Paulo`,
+    data: `${dayOfWeek} · ${displayDay.toString().padStart(2, "0")}/${displayMonth.toString().padStart(2, "0")}/${displayYear.toString().slice(-2)} · 20:00`,
+    headerData: `${displayDay.toString().padStart(2, "0")}/${displayMonth.toString().padStart(2, "0")}/${displayYear} - São Paulo`,
   };
 };
 
@@ -133,7 +138,7 @@ const rawTickets = [
     id: 2,
     tab: "2",
     evento: "BTS WORLD TOUR 'ARIRANG'",
-    ...getBTSDate(1),
+    ...getBTSDate(0),
     local: "São Paulo, no Estádio do MorumBIS",
     setor: "Cadeira Inferior",
     secao: "INTEIRA",
@@ -151,7 +156,7 @@ const rawTickets = [
     id: 3,
     tab: "3",
     evento: "BTS WORLD TOUR 'ARIRANG'",
-    ...getBTSDate(-2),
+    ...getBTSDate(0),
     local: "São Paulo, no Estádio do MorumBIS",
     setor: "Cadeira Superior",
     secao: "INTEIRA",
