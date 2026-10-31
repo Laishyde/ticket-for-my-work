@@ -317,6 +317,30 @@ export default function TicketsScreen() {
     return () => animation.stop();
   }, [selectedTicket]);
 
+  useEffect(() => {
+    if (!currentTicket.qr) return;
+
+    const supabase = getSupabaseClient();
+    const interval = setInterval(async () => {
+      const { data, error } = await supabase
+        .from('tickets')
+        .select('is_used')
+        .eq('qr_code', currentTicket.qr)
+        .single();
+
+      if (!error && data && data.is_used === true) {
+        setValidation({
+          code: currentTicket.qr,
+          status: 'used',
+          message: 'INGRESSO USADO',
+        });
+        clearInterval(interval);
+      }
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [currentTicket.qr]);
+
   const progressWidth = progressAnim.interpolate({
     inputRange: [0, 1],
     outputRange: ["0%", "100%"],
