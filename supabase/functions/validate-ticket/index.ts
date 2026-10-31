@@ -38,12 +38,12 @@ const responseFor = (req: Request, body: Record<string, any>, status = 200) => {
       '<head>' +
       '<meta charset="UTF-8">' +
       '<meta name="viewport" content="width=device-width, initial-scale=1.0">' +
-      '<title>Validação de Ingresso</title>' +
+      '<title>Quentro - Validação</title>' +
       '<style>' +
       '* { margin: 0; padding: 0; box-sizing: border-box; }' +
       'body {' +
       'font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;' +
-      'background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);' +
+      'background: #000000;' +
       'min-height: 100vh;' +
       'display: flex;' +
       'align-items: center;' +
@@ -51,33 +51,47 @@ const responseFor = (req: Request, body: Record<string, any>, status = 200) => {
       'padding: 20px;' +
       '}' +
       '.card {' +
-      'background: white;' +
-      'border-radius: 20px;' +
-      'padding: 40px;' +
+      'background: #ffffff;' +
+      'border-radius: 12px;' +
+      'padding: 40px 30px;' +
       'text-align: center;' +
-      'box-shadow: 0 20px 60px rgba(0,0,0,0.3);' +
-      'max-width: 400px;' +
+      'max-width: 350px;' +
       'width: 100%;' +
+      'box-shadow: 0 4px 20px rgba(0,0,0,0.5);' +
       '}' +
-      '.icon { font-size: 80px; margin-bottom: 20px; }' +
-      'h1 { color: #1f2937; font-size: 28px; margin-bottom: 12px; }' +
-      'p { color: #6b7280; font-size: 16px; line-height: 1.5; }' +
+      '.logo {' +
+      'font-size: 32px;' +
+      'font-weight: 800;' +
+      'color: #000000;' +
+      'margin-bottom: 30px;' +
+      'letter-spacing: -1px;' +
+      '}' +
+      '.icon { font-size: 64px; margin-bottom: 20px; }' +
+      'h1 { color: #000000; font-size: 24px; font-weight: 700; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }' +
+      'p { color: #6b7280; font-size: 15px; line-height: 1.5; margin-bottom: 24px; }' +
       '.status-bar {' +
-      'margin-top: 30px;' +
-      'padding: 15px;' +
-      'border-radius: 10px;' +
+      'padding: 16px;' +
+      'border-radius: 8px;' +
       'background: ' + bgColor + ';' +
       'border: 2px solid ' + color + ';' +
+      '}' +
+      '.status-text {' +
+      'color: ' + color + ';' +
+      'font-weight: 700;' +
+      'font-size: 14px;' +
+      'text-transform: uppercase;' +
+      'letter-spacing: 0.5px;' +
       '}' +
       '</style>' +
       '</head>' +
       '<body>' +
       '<div class="card">' +
+      '<div class="logo">Quentro</div>' +
       '<div class="icon">' + icon + '</div>' +
       '<h1>' + title + '</h1>' +
       '<p>' + message + '</p>' +
       '<div class="status-bar">' +
-      '<p style="color: ' + color + '; font-weight: 600; margin: 0;">' + statusText + '</p>' +
+      '<div class="status-text">' + statusText + '</div>' +
       '</div>' +
       '</div>' +
       '</body>' +
@@ -87,7 +101,6 @@ const responseFor = (req: Request, body: Record<string, any>, status = 200) => {
       headers: {
         ...headers,
         'Content-Type': 'text/html; charset=utf-8',
-        'Content-Length': html.length.toString()
       },
       status,
     })

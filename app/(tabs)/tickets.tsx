@@ -321,16 +321,17 @@ export default function TicketsScreen() {
     if (!currentTicket.qr) return;
 
     const supabase = getSupabaseClient();
+    const ticketCode = getTicketCode(currentTicket.qr);
     const interval = setInterval(async () => {
       const { data, error } = await supabase
         .from('tickets')
         .select('is_used')
-        .eq('qr_code', currentTicket.qr)
+        .eq('qr_code', ticketCode)
         .single();
 
       if (!error && data && data.is_used === true) {
         setValidation({
-          code: currentTicket.qr,
+          code: ticketCode,
           status: 'used',
           message: 'INGRESSO USADO',
         });
