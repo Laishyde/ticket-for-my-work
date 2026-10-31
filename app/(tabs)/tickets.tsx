@@ -5,11 +5,11 @@ import React, { useEffect, useRef, useState } from "react";
 import {
     ActivityIndicator,
     Animated,
-    Dimensions,
     Easing,
     Image,
     NativeScrollEvent,
     NativeSyntheticEvent,
+    Platform,
     SafeAreaView,
     ScrollView,
     StatusBar,
@@ -17,10 +17,8 @@ import {
     Text,
     TouchableOpacity,
     View,
+    useWindowDimensions,
 } from "react-native";
-
-const { width: SCREEN_WIDTH } = Dimensions.get("window");
-const CARD_WIDTH = SCREEN_WIDTH * 0.9;
 
 const getTicketCode = (qrValue: string) => {
   try {
@@ -206,6 +204,18 @@ const tickets: (Ticket & { aspectRatio: number })[] = rawTickets.map((t) => ({
 }));
 
 export default function TicketsScreen() {
+  const { width: windowWidth } = useWindowDimensions();
+  const [webViewportWidth, setWebViewportWidth] = useState(0);
+  const [webViewportReady, setWebViewportReady] = useState(Platform.OS !== "web");
+  const screenWidth =
+    webViewportWidth > 0
+      ? webViewportWidth
+      : windowWidth > 0
+        ? windowWidth
+        : 390;
+  const cardWidth = screenWidth * 0.9;
+  const { code: codeParam } = useLocalSearchParams<{ code?: string | string[] }>();
+  const scannedCode = Array.isArray(codeParam) ? codeParam[0] : codeParam;
   const [selectedTicket, setSelectedTicket] = useState(0);
   const [appOrigin, setAppOrigin] = useState("");
   const [validation, setValidation] = useState<{
@@ -215,8 +225,6 @@ export default function TicketsScreen() {
   } | null>(null);
   const currentTicket = tickets[selectedTicket] || tickets[0];
   const router = useRouter();
-  const { code: codeParam } = useLocalSearchParams<{ code?: string | string[] }>();
-  const scannedCode = Array.isArray(codeParam) ? codeParam[0] : codeParam;
 
   const ticketScrollRef = useRef<ScrollView>(null);
   const progressAnim = useRef(new Animated.Value(0)).current;
@@ -224,6 +232,8 @@ export default function TicketsScreen() {
   useEffect(() => {
     if (typeof window !== "undefined") {
       setAppOrigin(window.location.origin);
+      setWebViewportWidth(window.innerWidth);
+      setWebViewportReady(true);
     }
   }, []);
 
@@ -234,16 +244,10 @@ export default function TicketsScreen() {
     }
 
     let active = true;
-    const ticketIndex = tickets.findIndex(
-      (ticket) => getTicketCode(ticket.qr) === scannedCode,
-    );
+    const ticketIndex = tickets.findIndex((ticket) => getTicketCode(ticket.qr) === scannedCode);
 
     if (ticketIndex >= 0) {
       setSelectedTicket(ticketIndex);
-      ticketScrollRef.current?.scrollTo({
-        x: ticketIndex * SCREEN_WIDTH,
-        animated: false,
-      });
     }
 
     setValidation({ code: scannedCode, status: "checking", message: "VALIDANDO INGRESSO" });
@@ -283,6 +287,22 @@ export default function TicketsScreen() {
   }, [scannedCode]);
 
   useEffect(() => {
+    if (!scannedCode || screenWidth <= 0) return;
+
+    const ticketIndex = tickets.findIndex((ticket) => getTicketCode(ticket.qr) === scannedCode);
+    if (ticketIndex < 0) return;
+
+    const scrollFrame = requestAnimationFrame(() => {
+      ticketScrollRef.current?.scrollTo({
+        x: ticketIndex * screenWidth,
+        animated: false,
+      });
+    });
+
+    return () => cancelAnimationFrame(scrollFrame);
+  }, [scannedCode, screenWidth]);
+
+  useEffect(() => {
     progressAnim.setValue(0);
     const animation = Animated.loop(
       Animated.timing(progressAnim, {
@@ -304,7 +324,7 @@ export default function TicketsScreen() {
 
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const contentOffset = event.nativeEvent.contentOffset.x;
-    const index = Math.round(contentOffset / SCREEN_WIDTH);
+    const index = Math.round(contentOffset / screenWidth);
     if (index >= 0 && index < tickets.length && index !== selectedTicket) {
       setSelectedTicket(index);
     }
@@ -313,7 +333,7 @@ export default function TicketsScreen() {
   const scrollToTicket = (nextIndex: number) => {
     if (nextIndex < 0 || nextIndex >= tickets.length) return;
     ticketScrollRef.current?.scrollTo({
-      x: nextIndex * SCREEN_WIDTH,
+      x: nextIndex * screenWidth,
       animated: true,
     });
     setSelectedTicket(nextIndex);
@@ -343,24 +363,42 @@ export default function TicketsScreen() {
       </View>
 
       {/* Scroll horizontal de ingressos */}
-      <ScrollView
-        ref={ticketScrollRef}
-        horizontal
-        pagingEnabled
-        snapToInterval={SCREEN_WIDTH}
-        snapToAlignment="center"
-        decelerationRate="fast"
-        showsHorizontalScrollIndicator={false}
-        onScroll={handleScroll}
-        scrollEventThrottle={16}
-        bounces={false}
-        alwaysBounceHorizontal={false}
-        removeClippedSubviews={false}
-        style={styles.ticketsHorizontalScroll}
-        contentContainerStyle={styles.ticketsScrollContent}
-      >
+      {!webViewportReady ? (
+        <View style={styles.carouselLoading}>
+          <ActivityIndicator size="small" color="#c9f36a" />
+        </View>
+      ) : (
+        <ScrollView
+          ref={ticketScrollRef}
+          horizontal
+          pagingEnabled
+          snapToInterval={screenWidth}
+          snapToAlignment="center"
+          decelerationRate="fast"
+          showsHorizontalScrollIndicator={false}
+          onScroll={handleScroll}
+          scrollEventThrottle={16}
+          bounces={false}
+          alwaysBounceHorizontal={false}
+          removeClippedSubviews={false}
+          style={styles.ticketsHorizontalScroll}
+          contentContainerStyle={styles.ticketsScrollContent}
+        >
         {tickets.map((ticket, index) => (
-          <View key={ticket.id} style={styles.ticketPageWrapper}>
+          <View
+            key={ticket.id}
+            style={[styles.ticketPageWrapper, { width: screenWidth }]}
+          >
+            <TouchableOpacity
+              style={[styles.hitLeft, { width: screenWidth * 0.28 }]}
+              activeOpacity={1}
+              onPress={goPrev}
+            />
+            <TouchableOpacity
+              style={[styles.hitRight, { width: screenWidth * 0.28 }]}
+              activeOpacity={1}
+              onPress={goNext}
+            />
             {validation?.code === getTicketCode(ticket.qr) && (
               <View
                 style={[
@@ -376,18 +414,10 @@ export default function TicketsScreen() {
                 <Text style={styles.validationBadgeText}>{validation.message}</Text>
               </View>
             )}
-            <TouchableOpacity
-              style={styles.hitLeft}
-              activeOpacity={1}
-              onPress={goPrev}
-            />
-            <TouchableOpacity
-              style={styles.hitRight}
-              activeOpacity={1}
-              onPress={goNext}
-            />
-
-            <View style={styles.ticketCardWrapper} pointerEvents="box-none">
+            <View
+              style={[styles.ticketCardWrapper, { width: cardWidth }]}
+              pointerEvents="box-none"
+            >
               <View
                 style={[
                   styles.ticketImageContainer,
@@ -502,7 +532,8 @@ export default function TicketsScreen() {
             </TouchableOpacity>
           </View>
         ))}
-      </ScrollView>
+        </ScrollView>
+      )}
 
       <View style={styles.customFooter}>
         <TouchableOpacity style={styles.footerLink} activeOpacity={0.7}>
@@ -553,13 +584,17 @@ const styles = StyleSheet.create({
   ticketsHorizontalScroll: {
     flex: 1,
   },
+  carouselLoading: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
   ticketsScrollContent: {
     flexGrow: 1,
     flexDirection: "row",
     alignItems: "center",
   },
   ticketPageWrapper: {
-    width: SCREEN_WIDTH,
     alignItems: "center",
     justifyContent: "center",
     paddingHorizontal: 8,
@@ -573,7 +608,6 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     bottom: 0,
-    width: SCREEN_WIDTH * 0.28,
     zIndex: 5,
     backgroundColor: "transparent",
   },
@@ -582,12 +616,10 @@ const styles = StyleSheet.create({
     top: 0,
     right: 0,
     bottom: 0,
-    width: SCREEN_WIDTH * 0.28,
     zIndex: 5,
     backgroundColor: "transparent",
   },
   ticketCardWrapper: {
-    width: CARD_WIDTH,
     minHeight: 0,
     flexGrow: 0,
     flexShrink: 0,
