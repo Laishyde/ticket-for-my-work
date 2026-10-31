@@ -469,7 +469,7 @@ export default function TicketsScreen() {
                         {appOrigin ? (
                           <Image
                             source={{
-                              uri: `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(`${appOrigin}/tickets?code=${getTicketCode(ticket.qr)}`)}`,
+                              uri: `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(ticket.qr)}`,
                             }}
                             style={styles.qrImage}
                             resizeMode="cover"
