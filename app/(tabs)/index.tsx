@@ -46,20 +46,11 @@ const getDynamicShowDate = () => {
 
 export function TicketsHomeScreen() {
   const router = useRouter();
-  const [, setCurrentTime] = useState("");
   const [activeTab, setActiveTab] = useState<"proximos" | "anterior">("proximos");
   const [dynamicDate, setDynamicDate] = useState(getDynamicShowDate());
 
   useEffect(() => {
     const updateTime = () => {
-      const now = new Date();
-      setCurrentTime(
-        now.toLocaleTimeString("pt-BR", {
-          hour: "2-digit",
-          minute: "2-digit",
-          hour12: false,
-        }),
-      );
       setDynamicDate(getDynamicShowDate());
     };
     updateTime();
@@ -130,11 +121,7 @@ export function TicketsHomeScreen() {
           onPress={() => router.push("/tickets")}
           activeOpacity={0.8}
         >
-          <TouchableOpacity
-            style={styles.eventImageContainer}
-            onPress={() => router.push("/tickets")}
-            activeOpacity={0.8}
-          >
+          <View style={styles.eventImageContainer}>
             <ExpoImage
               source={require("../../assets/images/bts.png")}
               style={styles.eventImage}
@@ -143,7 +130,7 @@ export function TicketsHomeScreen() {
             <View style={styles.tagAgora}>
               <Text style={styles.tagAgoraText}>AGORA</Text>
             </View>
-          </TouchableOpacity>
+          </View>
 
           <View style={styles.eventInfo}>
             <View style={styles.ticketMeta}>
