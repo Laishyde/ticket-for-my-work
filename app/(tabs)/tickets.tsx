@@ -3,21 +3,21 @@ import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useRef, useState } from "react";
 import {
-    ActivityIndicator,
-    Animated,
-    Easing,
-    Image,
-    NativeScrollEvent,
-    NativeSyntheticEvent,
-    Platform,
-    SafeAreaView,
-    ScrollView,
-    StatusBar,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
-    useWindowDimensions,
+  ActivityIndicator,
+  Animated,
+  Easing,
+  Image,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  Platform,
+  SafeAreaView,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  useWindowDimensions,
 } from "react-native";
 
 const getTicketCode = (qrValue: string) => {
@@ -384,154 +384,174 @@ export default function TicketsScreen() {
           style={styles.ticketsHorizontalScroll}
           contentContainerStyle={styles.ticketsScrollContent}
         >
-        {tickets.map((ticket, index) => (
-          <View
-            key={ticket.id}
-            style={[styles.ticketPageWrapper, { width: screenWidth }]}
-          >
-            <TouchableOpacity
-              style={[styles.hitLeft, { width: screenWidth * 0.28 }]}
-              activeOpacity={1}
-              onPress={goPrev}
-            />
-            <TouchableOpacity
-              style={[styles.hitRight, { width: screenWidth * 0.28 }]}
-              activeOpacity={1}
-              onPress={goNext}
-            />
-            {validation?.code === getTicketCode(ticket.qr) && (
-              <View
-                style={[
-                  styles.validationBadge,
-                  validation.status === "used"
-                    ? styles.validationUsed
-                    : validation.status === "checking"
-                      ? styles.validationChecking
-                      : styles.validationError,
-                ]}
-              >
-                {validation.status === "checking" && <ActivityIndicator size="small" color="#ffffff" />}
-                <Text style={styles.validationBadgeText}>{validation.message}</Text>
-              </View>
-            )}
+        {tickets.map((ticket, index) => {
+          const isThisValidated = validation?.code === getTicketCode(ticket.qr);
+
+          return (
             <View
-              style={[styles.ticketCardWrapper, { width: cardWidth }]}
-              pointerEvents="box-none"
+              key={ticket.id}
+              style={[styles.ticketPageWrapper, { width: screenWidth }]}
             >
-              <View
-                style={[
-                  styles.ticketImageContainer,
-                  { aspectRatio: ticket.aspectRatio },
-                ]}
-              >
-                <Image
-                  source={ticket.image}
-                  style={styles.ticketCoverImage}
-                  resizeMode="contain"
-                />
-
-                <View style={styles.overlayBarContainer}>
-                  <Animated.View
-                    style={[
-                      styles.progressBar,
-                      {
-                        width: selectedTicket === index ? progressWidth : "0%",
-                      },
-                    ]}
-                  />
-                </View>
-              </View>
-
-              <View style={styles.whiteSection}>
-                <View style={styles.qrRow}>
-                  <View style={styles.qrImageContainer}>
-                    {appOrigin ? (
-                      <Image
-                        source={{
-                          uri: `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(`${appOrigin}/tickets?code=${getTicketCode(ticket.qr)}`)}`,
-                        }}
-                        style={styles.qrImage}
-                        resizeMode="cover"
-                      />
-                    ) : (
-                      <ActivityIndicator style={styles.qrLoading} color="#0074d1" />
-                    )}
-                  </View>
-
-                  <View style={styles.qrRightInfo}>
-                    <View>
-                      <Text style={styles.cardInfoLabel}>Setor</Text>
-                      <Text style={styles.cardInfoValue} numberOfLines={1}>
-                        {ticket.setor}
-                      </Text>
-                    </View>
-
-                    <View style={{ marginTop: 8 }}>
-                      <Text style={styles.cardInfoLabel}>Acesso</Text>
-                      <Text style={styles.cardInfoValue} numberOfLines={1}>
-                        {ticket.entrada}
-                      </Text>
-                    </View>
-
-                    <TouchableOpacity
-                      style={styles.moreInfoButton}
-                      activeOpacity={0.7}
-                    >
-                      <Text style={styles.moreInfoButtonText}>
-                        Mais informação
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              </View>
-
-              <View style={styles.dashedContainer}>
-                <View style={styles.dashedLine} />
-              </View>
-
-              {/* SEÇÃO DE INFORMAÇÕES */}
-              <View style={styles.graySection}>
-                <View style={styles.gridContainer}>
-                  {/* Linha 1: TAXA */}
-                  <View style={styles.gridItemFull}>
-                    <Text style={styles.gridLabel}>TAXA</Text>
-                    <Text style={styles.gridValueBold}>{ticket.valor}</Text>
-                  </View>
-
-                  {/* Linha 2: SEÇÃO e FILEIRA */}
-                  <View style={styles.gridItem}>
-                    <Text style={styles.gridLabel}>SEÇÃO</Text>
-                    <Text style={styles.gridValueBold}>{ticket.secao}</Text>
-                  </View>
-                  <View style={styles.gridItem}>
-                    <Text style={styles.gridLabel}>FILEIRA</Text>
-                    <Text style={styles.gridValueRegular}>Não numerado</Text>
-                  </View>
-
-                  {/* Linha 3: ABERTURA e INÍCIO */}
-                  <View style={styles.gridItem}>
-                    <Text style={styles.gridLabel}>ABERTURA</Text>
-                    <Text style={styles.gridValueBold}>{ticket.abertura}</Text>
-                  </View>
-                  <View style={styles.gridItem}>
-                    <Text style={styles.gridLabel}>INÍCIO</Text>
-                    <Text style={styles.gridValueBold}>{ticket.inicio}</Text>
-                  </View>
-                </View>
-              </View>
-            </View>
-
-            <TouchableOpacity style={styles.returnButton} activeOpacity={0.7}>
-              <Ionicons
-                name="arrow-undo"
-                size={16}
-                color="#0084ff"
-                style={styles.returnIcon}
+              <TouchableOpacity
+                style={[styles.hitLeft, { width: screenWidth * 0.28 }]}
+                activeOpacity={1}
+                onPress={goPrev}
               />
-              <Text style={styles.returnText}>Devolver ingresso</Text>
-            </TouchableOpacity>
-          </View>
-        ))}
+              <TouchableOpacity
+                style={[styles.hitRight, { width: screenWidth * 0.28 }]}
+                activeOpacity={1}
+                onPress={goNext}
+              />
+
+              <View
+                style={[styles.ticketCardWrapper, { width: cardWidth }]}
+                pointerEvents="box-none"
+              >
+                <View
+                  style={[
+                    styles.ticketImageContainer,
+                    { aspectRatio: ticket.aspectRatio },
+                  ]}
+                >
+                  <Image
+                    source={ticket.image}
+                    style={styles.ticketCoverImage}
+                    resizeMode="contain"
+                  />
+
+                  <View style={styles.overlayBarContainer}>
+                    <Animated.View
+                      style={[
+                        styles.progressBar,
+                        {
+                          width: selectedTicket === index ? progressWidth : "0%",
+                        },
+                      ]}
+                    />
+                  </View>
+                </View>
+
+                {/* SEÇÃO BRANCA / ESTADO VALIDADO OU NORMAL */}
+                <View style={styles.whiteSection}>
+                  {isThisValidated ? (
+                    /* Layout igualzinho à foto: caixa quadrada com ícone QR Code à esquerda e status à direita */
+                    <View style={styles.validatedRow}>
+                      <View style={styles.validatedQrBox}>
+                        <Ionicons name="qr-code-outline" size={32} color="#0074d1" />
+                      </View>
+
+                      <View style={styles.validatedRightContent}>
+                        {validation.status === "checking" ? (
+                          <View style={styles.checkingContainer}>
+                            <ActivityIndicator size="small" color="#0074d1" />
+                            <Text style={styles.validatedStatusTitle}>VALIDANDO</Text>
+                          </View>
+                        ) : (
+                          <Text style={styles.validatedStatusTitle} numberOfLines={1}>
+                            {validation.message}
+                          </Text>
+                        )}
+
+                        <TouchableOpacity
+                          style={styles.validatedMoreInfoButton}
+                          activeOpacity={0.7}
+                        >
+                          <Text style={styles.validatedMoreInfoButtonText}>
+                            Mais informação
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                  ) : (
+                    /* Layout normal antes de validar */
+                    <View style={styles.qrRow}>
+                      <View style={styles.qrImageContainer}>
+                        {appOrigin ? (
+                          <Image
+                            source={{
+                              uri: `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(`${appOrigin}/tickets?code=${getTicketCode(ticket.qr)}`)}`,
+                            }}
+                            style={styles.qrImage}
+                            resizeMode="cover"
+                          />
+                        ) : (
+                          <ActivityIndicator style={styles.qrLoading} color="#0074d1" />
+                        )}
+                      </View>
+
+                      <View style={styles.qrRightInfo}>
+                        <View>
+                          <Text style={styles.cardInfoLabel}>Setor</Text>
+                          <Text style={styles.cardInfoValue} numberOfLines={1}>
+                            {ticket.setor}
+                          </Text>
+                        </View>
+
+                        <View style={{ marginTop: 8 }}>
+                          <Text style={styles.cardInfoLabel}>Acesso</Text>
+                          <Text style={styles.cardInfoValue} numberOfLines={1}>
+                            {ticket.entrada}
+                          </Text>
+                        </View>
+
+                        <TouchableOpacity
+                          style={styles.moreInfoButton}
+                          activeOpacity={0.7}
+                        >
+                          <Text style={styles.moreInfoButtonText}>
+                            Mais informação
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                  )}
+                </View>
+
+                <View style={styles.dashedContainer}>
+                  <View style={styles.dashedLine} />
+                </View>
+
+                {/* SEÇÃO DE INFORMAÇÕES */}
+                <View style={styles.graySection}>
+                  <View style={styles.gridContainer}>
+                    <View style={styles.gridItemFull}>
+                      <Text style={styles.gridLabel}>TAXA</Text>
+                      <Text style={styles.gridValueBold}>{ticket.valor}</Text>
+                    </View>
+
+                    <View style={styles.gridItem}>
+                      <Text style={styles.gridLabel}>SEÇÃO</Text>
+                      <Text style={styles.gridValueBold}>{ticket.secao}</Text>
+                    </View>
+                    <View style={styles.gridItem}>
+                      <Text style={styles.gridLabel}>FILEIRA</Text>
+                      <Text style={styles.gridValueRegular}>Não numerado</Text>
+                    </View>
+
+                    <View style={styles.gridItem}>
+                      <Text style={styles.gridLabel}>ABERTURA</Text>
+                      <Text style={styles.gridValueBold}>{ticket.abertura}</Text>
+                    </View>
+                    <View style={styles.gridItem}>
+                      <Text style={styles.gridLabel}>INÍCIO</Text>
+                      <Text style={styles.gridValueBold}>{ticket.inicio}</Text>
+                    </View>
+                  </View>
+                </View>
+              </View>
+
+              <TouchableOpacity style={styles.returnButton} activeOpacity={0.7}>
+                <Ionicons
+                  name="arrow-undo"
+                  size={16}
+                  color="#0084ff"
+                  style={styles.returnIcon}
+                />
+                <Text style={styles.returnText}>Devolver ingresso</Text>
+              </TouchableOpacity>
+            </View>
+          );
+        })}
         </ScrollView>
       )}
 
@@ -680,35 +700,52 @@ const styles = StyleSheet.create({
   qrLoading: {
     flex: 1,
   },
-  validationBadge: {
-    position: "absolute",
-    top: 12,
-    left: 22,
-    right: 22,
-    zIndex: 8,
+  /* Estilos atualizados para o layout validado conforme a sua imagem */
+  validatedRow: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
-    minHeight: 40,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
+    height: 112,
+  },
+  validatedQrBox: {
+    width: 112,
+    height: 112,
     borderRadius: 8,
+    borderWidth: 1,
+    borderColor: "#e2e8f0",
+    backgroundColor: "#f8fafc",
+    alignItems: "center",
+    justifyContent: "center",
+    flexShrink: 0,
+  },
+  validatedRightContent: {
+    flex: 1,
+    height: 112,
+    paddingLeft: 16,
+    justifyContent: "center",
+  },
+  checkingContainer: {
+    flexDirection: "row",
+    alignItems: "center",
     gap: 8,
   },
-  validationUsed: {
-    backgroundColor: "#b4232f",
-  },
-  validationChecking: {
-    backgroundColor: "#8a6413",
-  },
-  validationError: {
-    backgroundColor: "#6e2929",
-  },
-  validationBadgeText: {
-    color: "#ffffff",
-    fontSize: 13,
+  validatedStatusTitle: {
+    fontSize: 16,
     fontWeight: "800",
-    textAlign: "center",
+    color: "#0074d1",
+    letterSpacing: 0.5,
+  },
+  validatedMoreInfoButton: {
+    backgroundColor: "#dff4f6",
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 6,
+    alignSelf: "flex-start",
+    marginTop: 10,
+  },
+  validatedMoreInfoButtonText: {
+    color: "#1fa8b3",
+    fontSize: 11,
+    fontWeight: "500",
   },
   qrRightInfo: {
     flex: 1,
