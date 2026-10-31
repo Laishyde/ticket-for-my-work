@@ -15,75 +15,80 @@ const responseFor = (req: Request, body: Record<string, any>, status = 200) => {
     let message = 'Este ingresso não foi encontrado no sistema.'
     let color = '#ef4444'
     let icon = '❌'
+    let statusText = 'Erro'
 
     if (body.message === 'INGRESSO USADO') {
       title = 'Ingresso Já Utilizado'
       message = 'Este ingresso já foi validado anteriormente.'
       color = '#f59e0b'
       icon = '⚠️'
+      statusText = 'Acesso Negado'
     } else if (body.valid === true) {
       title = 'Ingresso Validado!'
       message = 'Acesso liberado com sucesso.'
       color = '#10b981'
       icon = '✅'
+      statusText = 'Acesso Liberado'
     }
 
-    const html = `
-      <!DOCTYPE html>
-      <html lang="pt-BR">
-      <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Validação de Ingresso</title>
-        <style>
-          * { margin: 0; padding: 0; box-sizing: border-box; }
-          body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-          }
-          .card {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            text-align: center;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            max-width: 400px;
-            width: 100%;
-          }
-          .icon { font-size: 80px; margin-bottom: 20px; }
-          h1 { color: #1f2937; font-size: 28px; margin-bottom: 12px; }
-          p { color: #6b7280; font-size: 16px; line-height: 1.5; }
-          .status-bar {
-            margin-top: 30px;
-            padding: 15px;
-            border-radius: 10px;
-            background: ${color}20;
-            border: 2px solid ${color};
-          }
-        </style>
-      </head>
-      <body>
-        <div class="card">
-          <div class="icon">${icon}</div>
-          <h1>${title}</h1>
-          <p>${message}</p>
-          <div class="status-bar">
-            <p style="color: ${color}; font-weight: 600; margin: 0;">
-              ${body.valid === true ? 'Acesso Liberado' : body.message === 'INGRESSO USADO' ? 'Acesso Negado' : 'Erro'}
-            </p>
-          </div>
-        </div>
-      </body>
-      </html>
-    `
+    const bgColor = color + '20'
+
+    const html = '<!DOCTYPE html>' +
+      '<html lang="pt-BR">' +
+      '<head>' +
+      '<meta charset="UTF-8">' +
+      '<meta name="viewport" content="width=device-width, initial-scale=1.0">' +
+      '<title>Validação de Ingresso</title>' +
+      '<style>' +
+      '* { margin: 0; padding: 0; box-sizing: border-box; }' +
+      'body {' +
+      'font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;' +
+      'background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);' +
+      'min-height: 100vh;' +
+      'display: flex;' +
+      'align-items: center;' +
+      'justify-content: center;' +
+      'padding: 20px;' +
+      '}' +
+      '.card {' +
+      'background: white;' +
+      'border-radius: 20px;' +
+      'padding: 40px;' +
+      'text-align: center;' +
+      'box-shadow: 0 20px 60px rgba(0,0,0,0.3);' +
+      'max-width: 400px;' +
+      'width: 100%;' +
+      '}' +
+      '.icon { font-size: 80px; margin-bottom: 20px; }' +
+      'h1 { color: #1f2937; font-size: 28px; margin-bottom: 12px; }' +
+      'p { color: #6b7280; font-size: 16px; line-height: 1.5; }' +
+      '.status-bar {' +
+      'margin-top: 30px;' +
+      'padding: 15px;' +
+      'border-radius: 10px;' +
+      'background: ' + bgColor + ';' +
+      'border: 2px solid ' + color + ';' +
+      '}' +
+      '</style>' +
+      '</head>' +
+      '<body>' +
+      '<div class="card">' +
+      '<div class="icon">' + icon + '</div>' +
+      '<h1>' + title + '</h1>' +
+      '<p>' + message + '</p>' +
+      '<div class="status-bar">' +
+      '<p style="color: ' + color + '; font-weight: 600; margin: 0;">' + statusText + '</p>' +
+      '</div>' +
+      '</div>' +
+      '</body>' +
+      '</html>'
 
     return new Response(html, {
-      headers: { ...headers, 'Content-Type': 'text/html; charset=utf-8' },
+      headers: {
+        ...headers,
+        'Content-Type': 'text/html; charset=utf-8',
+        'Content-Length': html.length.toString()
+      },
       status,
     })
   }
