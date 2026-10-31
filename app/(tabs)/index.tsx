@@ -67,9 +67,7 @@ export function TicketsHomeScreen() {
     return () => clearInterval(interval);
   }, []);
 
-  const handleEventPress = (eventId: string) => {
-    (router as any).push(`/event/${eventId}`);
-  };
+
 
   return (
     <View style={styles.container}>
@@ -85,11 +83,19 @@ export function TicketsHomeScreen() {
           <Text style={styles.mainTitle}>Meus ingressos</Text>
           
           <View style={styles.headerIcons}>
-            <TouchableOpacity style={styles.iconButton} activeOpacity={0.7}>
+            <TouchableOpacity
+              style={styles.iconButton}
+              activeOpacity={0.7}
+              onPress={() => router.push("/tickets")}
+            >
               <Ionicons name="notifications-outline" size={20} color="#8e8e93" />
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.iconButton} activeOpacity={0.7}>
+            <TouchableOpacity
+              style={styles.iconButton}
+              activeOpacity={0.7}
+              onPress={() => router.push("/tickets")}
+            >
               <Ionicons name="person-outline" size={20} color="#8e8e93" />
             </TouchableOpacity>
           </View>
@@ -121,10 +127,14 @@ export function TicketsHomeScreen() {
         {/* Card de Ingresso */}
         <TouchableOpacity
           style={styles.ticketCard}
-          onPress={() => handleEventPress("djavan-rio")}
+          onPress={() => router.push("/tickets")}
           activeOpacity={0.8}
         >
-          <View style={styles.eventImageContainer}>
+          <TouchableOpacity
+            style={styles.eventImageContainer}
+            onPress={() => router.push("/tickets")}
+            activeOpacity={0.8}
+          >
             <ExpoImage
               source={require("../../assets/images/bts.png")}
               style={styles.eventImage}
@@ -133,7 +143,7 @@ export function TicketsHomeScreen() {
             <View style={styles.tagAgora}>
               <Text style={styles.tagAgoraText}>AGORA</Text>
             </View>
-          </View>
+          </TouchableOpacity>
 
           <View style={styles.eventInfo}>
             <View style={styles.ticketMeta}>
