@@ -135,7 +135,7 @@ const rawTickets = [
     entrada: "Portões 02, 04 e 18",
     valor: "R$ 1.250,00",
     total: "R$ 1.500,00",
-    qr: "https://zqcolmspkrucybtavibr.supabase.co/functions/v1/validate-ticket?code=BTS2026-SP-PISTA-1",
+    qr: "quentro://tickets?code=BTS2026-SP-PISTA-1",
     valorTipo: "Benefício Itaú 15%",
     abertura: "16:00",
     inicio: "20:00",
@@ -153,7 +153,7 @@ const rawTickets = [
     entrada: "Portões 17A e 17B",
     valor: "R$ 1.080,00",
     total: "R$ 1.296,00",
-    qr: "https://zqcolmspkrucybtavibr.supabase.co/functions/v1/validate-ticket?code=BTS2026-SP-CADEIRA-INFERIOR-2",
+    qr: "quentro://tickets?code=BTS2026-SP-CADEIRA-INFERIOR-2",
     valorTipo: "Benefício Itaú 15%",
     abertura: "16:00",
     inicio: "20:00",
@@ -171,7 +171,7 @@ const rawTickets = [
     entrada: "Portões 05 e 16",
     valor: "R$ 980,00",
     total: "R$ 1.176,00",
-    qr: "https://zqcolmspkrucybtavibr.supabase.co/functions/v1/validate-ticket?code=BTS2026-SP-CADEIRA-SUPERIOR-3",
+    qr: "quentro://tickets?code=BTS2026-SP-CADEIRA-SUPERIOR-3",
     valorTipo: "Benefício Itaú 15%",
     abertura: "16:00",
     inicio: "20:00",
@@ -189,7 +189,7 @@ const rawTickets = [
     entrada: "Portões 06 e 15",
     valor: "R$ 680,00",
     total: "R$ 816,00",
-    qr: "https://zqcolmspkrucybtavibr.supabase.co/functions/v1/validate-ticket?code=BTS2026-SP-ARQUIBANCADA-4",
+    qr: "quentro://tickets?code=BTS2026-SP-ARQUIBANCADA-4",
     valorTipo: "Benefício Itaú 15%",
     abertura: "16:00",
     inicio: "20:00",
@@ -223,6 +223,7 @@ export default function TicketsScreen() {
     status: "checking" | "used" | "error";
     message: string;
   } | null>(null);
+  const [showMask, setShowMask] = useState(false);
   const currentTicket = tickets[selectedTicket] || tickets[0];
   const router = useRouter();
 
@@ -240,9 +241,11 @@ export default function TicketsScreen() {
   useEffect(() => {
     if (!scannedCode) {
       setValidation(null);
+      setShowMask(false);
       return;
     }
 
+    setShowMask(true);
     let active = true;
     const ticketIndex = tickets.findIndex((ticket) => getTicketCode(ticket.qr) === scannedCode);
 
@@ -270,6 +273,10 @@ export default function TicketsScreen() {
             ? "INGRESSO USADO"
             : data.message || "INGRESSO NAO ENCONTRADO",
         });
+
+        setTimeout(() => {
+          setShowMask(false);
+        }, 3000);
       } catch (error) {
         if (!active) return;
         setValidation({
@@ -277,6 +284,10 @@ export default function TicketsScreen() {
           status: "error",
           message: error instanceof Error ? error.message : "FALHA AO VALIDAR INGRESSO",
         });
+
+        setTimeout(() => {
+          setShowMask(false);
+        }, 3000);
       }
     };
 
@@ -370,6 +381,52 @@ export default function TicketsScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="#000000" />
+
+      {showMask && (
+        <View style={styles.maskOverlay}>
+          <View style={styles.maskCard}>
+            <Text style={styles.maskLogo}>Quentro</Text>
+            {validation?.status === "checking" ? (
+              <ActivityIndicator size="large" color="#10b981" />
+            ) : validation?.status === "used" ? (
+              <Text style={styles.maskIcon}>✅</Text>
+            ) : (
+              <Text style={styles.maskIcon}>❌</Text>
+            )}
+            <Text style={styles.maskTitle}>
+              {validation?.status === "checking"
+                ? "Validando..."
+                : validation?.status === "used"
+                ? "Ingresso Validado!"
+                : "Erro"}
+            </Text>
+            <Text style={styles.maskMessage}>
+              {validation?.status === "checking"
+                ? "Por favor, aguarde"
+                : validation?.status === "used"
+                ? "Acesso liberado com sucesso"
+                : validation?.message || "Falha na validação"}
+            </Text>
+            <View style={[
+              styles.maskStatusBar,
+              validation?.status === "used" ? styles.maskStatusSuccess :
+              validation?.status === "error" ? styles.maskStatusError :
+              styles.maskStatusChecking
+            ]}>
+              <Text style={[
+                styles.maskStatusText,
+                validation?.status === "used" ? { color: "#10b981" } :
+                validation?.status === "error" ? { color: "#ef4444" } :
+                { color: "#0074d1" }
+              ]}>
+                {validation?.status === "checking" ? "VERIFICANDO" :
+                 validation?.status === "used" ? "ACESSO LIBERADO" :
+                 "ACESSO NEGADO"}
+              </Text>
+            </View>
+          </View>
+        </View>
+      )}
 
       {/* Cabeçalho do Evento */}
       <View style={styles.header}>
@@ -908,5 +965,77 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontWeight: "500",
     color: "#c8b6a7",
+  },
+  maskOverlay: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "#000000",
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 1000,
+  },
+  maskCard: {
+    backgroundColor: "#ffffff",
+    borderRadius: 12,
+    padding: 40,
+    alignItems: "center",
+    width: "85%",
+    maxWidth: 350,
+  },
+  maskLogo: {
+    fontSize: 32,
+    fontWeight: "800",
+    color: "#000000",
+    marginBottom: 30,
+    letterSpacing: -1,
+  },
+  maskIcon: {
+    fontSize: 64,
+    marginBottom: 20,
+  },
+  maskTitle: {
+    fontSize: 24,
+    fontWeight: "700",
+    color: "#000000",
+    marginBottom: 12,
+    textTransform: "uppercase",
+    letterSpacing: 0.5,
+  },
+  maskMessage: {
+    fontSize: 15,
+    color: "#6b7280",
+    textAlign: "center",
+    marginBottom: 24,
+    lineHeight: 22,
+  },
+  maskStatusBar: {
+    padding: 16,
+    borderRadius: 8,
+    width: "100%",
+  },
+  maskStatusSuccess: {
+    backgroundColor: "#10b98120",
+    borderWidth: 2,
+    borderColor: "#10b981",
+  },
+  maskStatusError: {
+    backgroundColor: "#ef444420",
+    borderWidth: 2,
+    borderColor: "#ef4444",
+  },
+  maskStatusChecking: {
+    backgroundColor: "#0074d120",
+    borderWidth: 2,
+    borderColor: "#0074d1",
+  },
+  maskStatusText: {
+    fontSize: 14,
+    fontWeight: "700",
+    textTransform: "uppercase",
+    letterSpacing: 0.5,
+    textAlign: "center",
   },
 });
