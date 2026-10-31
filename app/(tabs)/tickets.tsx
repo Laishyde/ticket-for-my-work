@@ -273,10 +273,6 @@ export default function TicketsScreen() {
             ? "INGRESSO USADO"
             : data.message || "INGRESSO NAO ENCONTRADO",
         });
-
-        setTimeout(() => {
-          setShowMask(false);
-        }, 3000);
       } catch (error) {
         if (!active) return;
         setValidation({
@@ -284,10 +280,6 @@ export default function TicketsScreen() {
           status: "error",
           message: error instanceof Error ? error.message : "FALHA AO VALIDAR INGRESSO",
         });
-
-        setTimeout(() => {
-          setShowMask(false);
-        }, 3000);
       }
     };
 
@@ -424,6 +416,14 @@ export default function TicketsScreen() {
                  "ACESSO NEGADO"}
               </Text>
             </View>
+            {validation?.status !== "checking" && (
+              <TouchableOpacity
+                style={styles.maskCloseButton}
+                onPress={() => router.replace("/")}
+              >
+                <Text style={styles.maskCloseButtonText}>Fechar</Text>
+              </TouchableOpacity>
+            )}
           </View>
         </View>
       )}
@@ -1036,6 +1036,20 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     textTransform: "uppercase",
     letterSpacing: 0.5,
+    textAlign: "center",
+  },
+  maskCloseButton: {
+    marginTop: 24,
+    backgroundColor: "#000000",
+    paddingHorizontal: 32,
+    paddingVertical: 14,
+    borderRadius: 8,
+    width: "100%",
+  },
+  maskCloseButtonText: {
+    color: "#ffffff",
+    fontSize: 16,
+    fontWeight: "700",
     textAlign: "center",
   },
 });
