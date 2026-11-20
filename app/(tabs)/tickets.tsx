@@ -92,108 +92,24 @@ const getImageAspectRatio = (image: any, fallback = 3 / 2) => {
   return fallback;
 };
 
-const getBTSDate = (dayOffset: number) => {
-  const today = new Date();
-  const currentDay = today.getDate();
-  const currentMonth = today.getMonth();
-  const currentYear = today.getFullYear();
-
-  let showDay = currentDay + dayOffset;
-  let targetDate = new Date(currentYear, currentMonth, showDay);
-  let finalDate = targetDate;
-
-  const daysOfWeek = [
-    "Domingo",
-    "Segunda-feira",
-    "Terça-feira",
-    "Quarta-feira",
-    "Quinta-feira",
-    "Sexta-feira",
-    "Sábado",
-  ];
-  const dayOfWeek = daysOfWeek[finalDate.getDay()];
-
-  const displayDay = finalDate.getDate();
-  const displayMonth = finalDate.getMonth() + 1;
-  const displayYear = finalDate.getFullYear();
-
-  return {
-    data: `${dayOfWeek} · ${displayDay.toString().padStart(2, "0")}/${displayMonth.toString().padStart(2, "0")}/${displayYear.toString().slice(-2)} · 20:00`,
-    headerData: `${displayDay.toString().padStart(2, "0")}/${displayMonth.toString().padStart(2, "0")}/${displayYear}São Paulo`,
-  };
-};
-
 const rawTickets = [
   {
     id: 1,
     tab: "1",
-    evento: "BTS WORLD TOUR 'ARIRANG'",
-    ...getBTSDate(0),
-    local: "São Paulo, no Estádio do MorumBIS",
-    setor: "Pista",
-    secao: "INTEIRA",
-    entrada: "Portões 02, 04 e 18",
-    valor: "R$ 1.250,00",
-    total: "R$ 1.500,00",
-    qr: "quentro://tickets?code=BTS2026-SP-PISTA-1",
-    valorTipo: "Benefício Itaú 15%",
-    abertura: "16:00",
-    inicio: "20:00",
-    image: require("../../assets/images/ticket.png"),
-    eventInfo,
-  },
-  {
-    id: 2,
-    tab: "2",
-    evento: "BTS WORLD TOUR 'ARIRANG'",
-    ...getBTSDate(0),
-    local: "São Paulo, no Estádio do MorumBIS",
-    setor: "Cadeira Inferior",
-    secao: "INTEIRA",
-    entrada: "Portões 17A e 17B",
-    valor: "R$ 1.080,00",
-    total: "R$ 1.296,00",
-    qr: "quentro://tickets?code=BTS2026-SP-CADEIRA-INFERIOR-2",
-    valorTipo: "Benefício Itaú 15%",
-    abertura: "16:00",
-    inicio: "20:00",
-    image: require("../../assets/images/ticket.png"),
-    eventInfo,
-  },
-  {
-    id: 3,
-    tab: "3",
-    evento: "BTS WORLD TOUR 'ARIRANG'",
-    ...getBTSDate(0),
-    local: "São Paulo, no Estádio do MorumBIS",
-    setor: "Cadeira Superior",
-    secao: "INTEIRA",
-    entrada: "Portões 05 e 16",
-    valor: "R$ 980,00",
-    total: "R$ 1.176,00",
-    qr: "quentro://tickets?code=BTS2026-SP-CADEIRA-SUPERIOR-3",
-    valorTipo: "Benefício Itaú 15%",
-    abertura: "16:00",
-    inicio: "20:00",
-    image: require("../../assets/images/ticket.png"),
-    eventInfo,
-  },
-  {
-    id: 4,
-    tab: "4",
-    evento: "BTS WORLD TOUR 'ARIRANG'",
-    ...getBTSDate(0),
-    local: "São Paulo, no Estádio do MorumBIS",
-    setor: "Arquibancada",
-    secao: "INTEIRA",
-    entrada: "Portões 06 e 15",
-    valor: "R$ 680,00",
-    total: "R$ 816,00",
-    qr: "quentro://tickets?code=BTS2026-SP-ARQUIBANCADA-4",
-    valorTipo: "Benefício Itaú 15%",
-    abertura: "16:00",
-    inicio: "20:00",
-    image: require("../../assets/images/ticket.png"),
+    evento: "Best Of Blues And Rock",
+    data: "Sexta-feira · 20/11/26 · 16:00",
+    headerData: "20/11/2026São Paulo",
+    local: "São Paulo, no Auditório do Ibirapuera (Plateia Externa)",
+    setor: "Arena (Gramado)",
+    secao: "-",
+    entrada: "-",
+    valor: "R$ 1.008,00",
+    total: "R$ 1.008,00",
+    qr: "https://zqcolmspkrucybtavibr.supabase.co/functions/v1/validate-ticket?code=BLOBS2026-SP-ARENA-1",
+    valorTipo: "Inteira - Lote 1",
+    abertura: "14:00",
+    inicio: "16:00",
+    image: require("../../assets/images/new.jpg"),
     eventInfo,
   },
 ];
@@ -223,7 +139,6 @@ export default function TicketsScreen() {
     status: "checking" | "used" | "error";
     message: string;
   } | null>(null);
-  const [showMask, setShowMask] = useState(false);
   const currentTicket = tickets[selectedTicket] || tickets[0];
   const router = useRouter();
 
@@ -241,11 +156,9 @@ export default function TicketsScreen() {
   useEffect(() => {
     if (!scannedCode) {
       setValidation(null);
-      setShowMask(false);
       return;
     }
 
-    setShowMask(true);
     let active = true;
     const ticketIndex = tickets.findIndex((ticket) => getTicketCode(ticket.qr) === scannedCode);
 
@@ -373,60 +286,6 @@ export default function TicketsScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="#000000" />
-
-      {showMask && (
-        <View style={styles.maskOverlay}>
-          <View style={styles.maskCard}>
-            <Text style={styles.maskLogo}>Quentro</Text>
-            {validation?.status === "checking" ? (
-              <ActivityIndicator size="large" color="#10b981" />
-            ) : validation?.status === "used" ? (
-              <Text style={styles.maskIcon}>✅</Text>
-            ) : (
-              <Text style={styles.maskIcon}>❌</Text>
-            )}
-            <Text style={styles.maskTitle}>
-              {validation?.status === "checking"
-                ? "Validando..."
-                : validation?.status === "used"
-                ? "Ingresso Validado!"
-                : "Erro"}
-            </Text>
-            <Text style={styles.maskMessage}>
-              {validation?.status === "checking"
-                ? "Por favor, aguarde"
-                : validation?.status === "used"
-                ? "Acesso liberado com sucesso"
-                : validation?.message || "Falha na validação"}
-            </Text>
-            <View style={[
-              styles.maskStatusBar,
-              validation?.status === "used" ? styles.maskStatusSuccess :
-              validation?.status === "error" ? styles.maskStatusError :
-              styles.maskStatusChecking
-            ]}>
-              <Text style={[
-                styles.maskStatusText,
-                validation?.status === "used" ? { color: "#10b981" } :
-                validation?.status === "error" ? { color: "#ef4444" } :
-                { color: "#0074d1" }
-              ]}>
-                {validation?.status === "checking" ? "VERIFICANDO" :
-                 validation?.status === "used" ? "ACESSO LIBERADO" :
-                 "ACESSO NEGADO"}
-              </Text>
-            </View>
-            {validation?.status !== "checking" && (
-              <TouchableOpacity
-                style={styles.maskCloseButton}
-                onPress={() => router.replace("/")}
-              >
-                <Text style={styles.maskCloseButtonText}>Fechar</Text>
-              </TouchableOpacity>
-            )}
-          </View>
-        </View>
-      )}
 
       {/* Cabeçalho do Evento */}
       <View style={styles.header}>
@@ -965,91 +824,5 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontWeight: "500",
     color: "#c8b6a7",
-  },
-  maskOverlay: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: "#000000",
-    justifyContent: "center",
-    alignItems: "center",
-    zIndex: 1000,
-  },
-  maskCard: {
-    backgroundColor: "#ffffff",
-    borderRadius: 12,
-    padding: 40,
-    alignItems: "center",
-    width: "85%",
-    maxWidth: 350,
-  },
-  maskLogo: {
-    fontSize: 32,
-    fontWeight: "800",
-    color: "#000000",
-    marginBottom: 30,
-    letterSpacing: -1,
-  },
-  maskIcon: {
-    fontSize: 64,
-    marginBottom: 20,
-  },
-  maskTitle: {
-    fontSize: 24,
-    fontWeight: "700",
-    color: "#000000",
-    marginBottom: 12,
-    textTransform: "uppercase",
-    letterSpacing: 0.5,
-  },
-  maskMessage: {
-    fontSize: 15,
-    color: "#6b7280",
-    textAlign: "center",
-    marginBottom: 24,
-    lineHeight: 22,
-  },
-  maskStatusBar: {
-    padding: 16,
-    borderRadius: 8,
-    width: "100%",
-  },
-  maskStatusSuccess: {
-    backgroundColor: "#10b98120",
-    borderWidth: 2,
-    borderColor: "#10b981",
-  },
-  maskStatusError: {
-    backgroundColor: "#ef444420",
-    borderWidth: 2,
-    borderColor: "#ef4444",
-  },
-  maskStatusChecking: {
-    backgroundColor: "#0074d120",
-    borderWidth: 2,
-    borderColor: "#0074d1",
-  },
-  maskStatusText: {
-    fontSize: 14,
-    fontWeight: "700",
-    textTransform: "uppercase",
-    letterSpacing: 0.5,
-    textAlign: "center",
-  },
-  maskCloseButton: {
-    marginTop: 24,
-    backgroundColor: "#000000",
-    paddingHorizontal: 32,
-    paddingVertical: 14,
-    borderRadius: 8,
-    width: "100%",
-  },
-  maskCloseButtonText: {
-    color: "#ffffff",
-    fontSize: 16,
-    fontWeight: "700",
-    textAlign: "center",
   },
 });

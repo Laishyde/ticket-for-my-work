@@ -33,69 +33,69 @@ const responseFor = (req: Request, body: Record<string, any>, status = 200) => {
 
     const bgColor = color + '20'
 
-    const html = '<!DOCTYPE html>' +
-      '<html lang="pt-BR">' +
-      '<head>' +
-      '<meta charset="UTF-8">' +
-      '<meta name="viewport" content="width=device-width, initial-scale=1.0">' +
-      '<title>Quentro - Validação</title>' +
-      '<style>' +
-      '* { margin: 0; padding: 0; box-sizing: border-box; }' +
-      'body {' +
-      'font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;' +
-      'background: #000000;' +
-      'min-height: 100vh;' +
-      'display: flex;' +
-      'align-items: center;' +
-      'justify-content: center;' +
-      'padding: 20px;' +
-      '}' +
-      '.card {' +
-      'background: #ffffff;' +
-      'border-radius: 12px;' +
-      'padding: 40px 30px;' +
-      'text-align: center;' +
-      'max-width: 350px;' +
-      'width: 100%;' +
-      'box-shadow: 0 4px 20px rgba(0,0,0,0.5);' +
-      '}' +
-      '.logo {' +
-      'font-size: 32px;' +
-      'font-weight: 800;' +
-      'color: #000000;' +
-      'margin-bottom: 30px;' +
-      'letter-spacing: -1px;' +
-      '}' +
-      '.icon { font-size: 64px; margin-bottom: 20px; }' +
-      'h1 { color: #000000; font-size: 24px; font-weight: 700; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }' +
-      'p { color: #6b7280; font-size: 15px; line-height: 1.5; margin-bottom: 24px; }' +
-      '.status-bar {' +
-      'padding: 16px;' +
-      'border-radius: 8px;' +
-      'background: ' + bgColor + ';' +
-      'border: 2px solid ' + color + ';' +
-      '}' +
-      '.status-text {' +
-      'color: ' + color + ';' +
-      'font-weight: 700;' +
-      'font-size: 14px;' +
-      'text-transform: uppercase;' +
-      'letter-spacing: 0.5px;' +
-      '}' +
-      '</style>' +
-      '</head>' +
-      '<body>' +
-      '<div class="card">' +
-      '<div class="logo">Quentro</div>' +
-      '<div class="icon">' + icon + '</div>' +
-      '<h1>' + title + '</h1>' +
-      '<p>' + message + '</p>' +
-      '<div class="status-bar">' +
-      '<div class="status-text">' + statusText + '</div>' +
-      '</div>' +
-      '</div>' +
-      '</body>' +
-      '</html>'
+    const html = `<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quentro - Validação</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #000000;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .card {
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 40px 30px;
+      text-align: center;
+      max-width: 350px;
+      width: 100%;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    }
+    .logo {
+      font-size: 32px;
+      font-weight: 800;
+      color: #000000;
+      margin-bottom: 30px;
+      letter-spacing: -1px;
+    }
+    .icon { font-size: 64px; margin-bottom: 20px; }
+    h1 { color: #000000; font-size: 24px; font-weight: 700; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+    p { color: #6b7280; font-size: 15px; line-height: 1.5; margin-bottom: 24px; }
+    .status-bar {
+      padding: 16px;
+      border-radius: 8px;
+      background: ${bgColor};
+      border: 2px solid ${color};
+    }
+    .status-text {
+      color: ${color};
+      font-weight: 700;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo">Quentro</div>
+    <div class="icon">${icon}</div>
+    <h1>${title}</h1>
+    <p>${message}</p>
+    <div class="status-bar">
+      <div class="status-text">${statusText}</div>
+    </div>
+  </div>
+</body>
+</html>`
 
     return new Response(html, {
       headers: {

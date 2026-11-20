@@ -123,7 +123,7 @@ export function TicketsHomeScreen() {
         >
           <View style={styles.eventImageContainer}>
             <ExpoImage
-              source={require("../../assets/images/bts.png")}
+              source={require("../../assets/images/new.jpg")}
               style={styles.eventImage}
               contentFit="cover"
             />
@@ -134,17 +134,17 @@ export function TicketsHomeScreen() {
 
           <View style={styles.eventInfo}>
             <View style={styles.ticketMeta}>
-              <Text style={styles.ticketCount}>2 ingressos</Text>
+              <Text style={styles.ticketCount}>1 ingresso</Text>
               <Text style={styles.dotSeparator}></Text>
               <Text style={styles.eventDate}></Text>
             </View>
 
             <Text style={styles.eventTitle} numberOfLines={2}>
-             BTS WORLD TOUR 'ARIRANG'
+             Best Of Blues And Rock
             </Text>
 
             <Text style={styles.eventLocation} numberOfLines={1}>
-              São Paulo, no Estádio do MorumBIS
+              São Paulo, no Auditório do Ibirapuera (Plateia Externa)
             </Text>
           </View>
         </TouchableOpacity>
