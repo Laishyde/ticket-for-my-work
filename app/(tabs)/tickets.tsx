@@ -110,13 +110,14 @@ const rawTickets = [
     abertura: "14:00",
     inicio: "16:00",
     image: require("../../assets/images/new.jpg"),
+    aspectRatio: 1152 / 864,
     eventInfo,
   },
 ];
 
 const tickets: (Ticket & { aspectRatio: number })[] = rawTickets.map((t) => ({
   ...t,
-  aspectRatio: getImageAspectRatio(t.image),
+  aspectRatio: t.aspectRatio ?? getImageAspectRatio(t.image),
 }));
 
 export default function TicketsScreen() {
