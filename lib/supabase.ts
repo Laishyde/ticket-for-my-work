@@ -2,7 +2,7 @@ import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl =
 	process.env.EXPO_PUBLIC_SUPABASE_URL || 'https://zqcolmspkrucybtavibr.supabase.co';
-const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY;
+const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || 'sb_publishable_Ali3kOfNcA62y5z7dyIoBQ_LyWa8tsj';
 
 export const supabase = supabaseAnonKey
 	? createClient(supabaseUrl, supabaseAnonKey, {

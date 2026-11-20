@@ -1,4 +1,3 @@
-import { getSupabaseClient } from "@/lib/supabase";
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useRef, useState } from "react";
@@ -155,52 +154,13 @@ export default function TicketsScreen() {
   }, []);
 
   useEffect(() => {
-    if (!scannedCode) {
-      setValidation(null);
-      return;
-    }
+    setValidation(null);
+    if (!scannedCode) return;
 
-    let active = true;
     const ticketIndex = tickets.findIndex((ticket) => getTicketCode(ticket.qr) === scannedCode);
-
     if (ticketIndex >= 0) {
       setSelectedTicket(ticketIndex);
     }
-
-    setValidation({ code: scannedCode, status: "checking", message: "VALIDANDO INGRESSO" });
-
-    const validateTicket = async () => {
-      try {
-        const { data, error } = await getSupabaseClient().functions.invoke(
-          "validate-ticket",
-          { body: { qr_code: scannedCode } },
-        );
-
-        if (error) throw error;
-        if (!active) return;
-
-        const wasUsed = data.message === "INGRESSO USADO" || data.valid === true;
-        setValidation({
-          code: scannedCode,
-          status: wasUsed ? "used" : "error",
-          message: wasUsed
-            ? "INGRESSO USADO"
-            : data.message || "INGRESSO NAO ENCONTRADO",
-        });
-      } catch (error) {
-        if (!active) return;
-        setValidation({
-          code: scannedCode,
-          status: "error",
-          message: error instanceof Error ? error.message : "FALHA AO VALIDAR INGRESSO",
-        });
-      }
-    };
-
-    void validateTicket();
-    return () => {
-      active = false;
-    };
   }, [scannedCode]);
 
   useEffect(() => {
@@ -233,31 +193,6 @@ export default function TicketsScreen() {
 
     return () => animation.stop();
   }, [selectedTicket]);
-
-  useEffect(() => {
-    if (!currentTicket.qr) return;
-
-    const supabase = getSupabaseClient();
-    const ticketCode = getTicketCode(currentTicket.qr);
-    const interval = setInterval(async () => {
-      const { data, error } = await supabase
-        .from('tickets')
-        .select('is_used')
-        .eq('qr_code', ticketCode)
-        .single();
-
-      if (!error && data && data.is_used === true) {
-        setValidation({
-          code: ticketCode,
-          status: 'used',
-          message: 'INGRESSO USADO',
-        });
-        clearInterval(interval);
-      }
-    }, 3000);
-
-    return () => clearInterval(interval);
-  }, [currentTicket.qr]);
 
   const progressWidth = progressAnim.interpolate({
     inputRange: [0, 1],
